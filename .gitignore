@@ -1,0 +1,16 @@
+# Local configuration and generated data
+.env
+logs/*
+!logs/.htaccess
+uploads/*
+!uploads/.htaccess
+
+# Local editor and OS files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Unrelated local capstone notes
+Chapter_5_AutoTrace.md
+chapter5_template.html
