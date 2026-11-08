@@ -8,6 +8,10 @@ The estimated prices were chosen as illustrative values within the ranges of pub
 
 The existing account, admin, and knowledge-base platform remains available through `login.php`, `admin/`, and `workspace.php`. Staff tools require the MySQL setup described below; the customer FAQ page does not.
 
+### Vercel deployment
+
+Vercel serves the static site in `public/`, selected by `vercel.json`. The PHP source remains for XAMPP, but Vercel does not run the PHP admin tools or `api/sabino.php`. The Vercel chatbot answers the same core FAQs in the browser and keeps chat history in session storage. After changing the shop facts or menu in `includes/sabino.php`, run `php build-static.php`, commit the updated `public/` files, and redeploy.
+
 ## Original platform setup
 
 A complete, production-quality AI chatbot platform designed to run locally on Windows using XAMPP. This system features a full Retrieval-Augmented Generation (RAG) architecture, allowing you to build a custom knowledge base for your AI.
