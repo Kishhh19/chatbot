@@ -9,7 +9,12 @@ function sabino_data(): array {
         'phone_link' => 'tel:+639166539270',
         'instagram' => 'https://www.instagram.com/sabinowhoknows/',
         'maps' => 'https://www.google.com/maps/search/?api=1&query=693+D.+Fajardo+Street%2C+Salapungan%2C+Angeles+City%2C+Pampanga',
-        'hours' => 'Monday–Saturday; opening has been reported around 7:00 AM or 9:00 AM depending on the day. Sunday closed. Closing times are not confirmed. Please contact Sabino before visiting.',
+        'hours' => 'Monday–Friday, 9:00 AM–10:00 PM; Saturday, 1:00 PM–9:00 PM; Sunday closed. Please contact Sabino to confirm holiday or special-event hours.',
+        'hours_short' => [
+            ['days' => 'Monday–Friday', 'time' => '9:00 AM–10:00 PM'],
+            ['days' => 'Saturday', 'time' => '1:00 PM–9:00 PM'],
+            ['days' => 'Sunday', 'time' => 'Closed'],
+        ],
         'sample_menu' => [
             ['name' => 'Americano', 'price' => 100, 'type' => 'Coffee', 'note' => 'Espresso and water'],
             ['name' => 'Café Latte', 'price' => 140, 'type' => 'Coffee', 'note' => 'Espresso with milk'],

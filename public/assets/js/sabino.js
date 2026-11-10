@@ -6,10 +6,34 @@ const followups = document.getElementById('followups');
 const intro = document.getElementById('intro');
 const scrollPane = document.getElementById('chat-scroll');
 const sendButton = document.getElementById('send-button');
+const chatPanel = document.getElementById('chat-panel');
+const chatLauncher = document.getElementById('chat-launcher');
+const chatBackdrop = document.getElementById('chat-backdrop');
+const chatClose = document.getElementById('chat-close');
+const navToggle = document.querySelector('.nav-toggle');
+const siteNav = document.querySelector('.site-nav');
 let busy = false;
 let touched = false;
 const shop = window.SABINO_DATA;
 const storageKey = 'sabinox-chat';
+
+function openChat(question = '') {
+  chatPanel.classList.add('open');
+  chatBackdrop.classList.add('open');
+  chatPanel.setAttribute('aria-hidden', 'false');
+  chatLauncher.setAttribute('aria-expanded', 'true');
+  document.body.classList.add('chat-open');
+  window.setTimeout(() => input.focus(), 180);
+  if (question) sendMessage(question);
+}
+function closeChat() {
+  chatPanel.classList.remove('open');
+  chatBackdrop.classList.remove('open');
+  chatPanel.setAttribute('aria-hidden', 'true');
+  chatLauncher.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('chat-open');
+  chatLauncher.focus();
+}
 
 function readHistory() {
   try { return JSON.parse(sessionStorage.getItem(storageKey) || '[]'); } catch { return []; }
@@ -205,7 +229,17 @@ async function sendMessage(override) {
 chatForm.addEventListener('submit', event => {event.preventDefault(); sendMessage();});
 input.addEventListener('keydown', event => {if (event.key === 'Enter' && !event.shiftKey) {event.preventDefault(); sendMessage();}});
 input.addEventListener('input', () => {input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 135) + 'px';});
-document.querySelectorAll('[data-question]').forEach(button => button.addEventListener('click', () => sendMessage(button.dataset.question)));
+document.querySelectorAll('[data-chat-open]').forEach(button => button.addEventListener('click', () => openChat(button.dataset.question || '')));
+document.querySelectorAll('.chat-panel [data-question]').forEach(button => button.addEventListener('click', () => sendMessage(button.dataset.question)));
+chatLauncher.addEventListener('click', () => openChat());
+chatClose.addEventListener('click', closeChat);
+chatBackdrop.addEventListener('click', closeChat);
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && chatPanel.classList.contains('open')) closeChat(); });
+navToggle.addEventListener('click', () => {
+  const open = siteNav.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', String(open));
+});
+siteNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { siteNav.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false'); }));
 document.getElementById('new-chat').addEventListener('click', () => {
   if (busy) return;
   touched = true;

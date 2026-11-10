@@ -1,8 +1,8 @@
-# Sabinox — Sabino café helper
+# Sabino website + Sabinox café helper
 
-The customer page at `index.php` now works without an account or AI API key. Sabinox answers Sabino FAQs, gives directions and contact details, and shows a **sample menu with estimated Philippine café prices**. It never presents that sample as Sabino's official menu. Customer chat history is kept in the browser session; **New chat** clears it.
+The customer page at `index.php` is now a complete responsive Sabino coffee-shop website. It includes brand and story sections, a **sample menu with estimated Philippine café prices**, directions, hours, contact links, and an embedded Sabinox helper. It works without an account or AI API key. Customer chat history is kept in the browser session; **New chat** clears it.
 
-The shop facts and all provisional menu items live in `includes/sabino.php`. When Sabino provides its exact menu, replace `sample_menu` there and update the sample labels in `index.php` and `assets/js/sabino.js`. Review the FAQ replies in the same PHP file, especially the hours wording. The supplied hours do not include confirmed closing times, so Sabinox asks visitors to call before traveling.
+The shop facts, profile hours, and all provisional menu items live in `includes/sabino.php`. When Sabino provides its exact menu, replace `sample_menu` there and update the sample labels in `index.php`. Sabinox currently reports Monday–Friday 9:00 AM–10:00 PM, Saturday 1:00 PM–9:00 PM, and Sunday closed; it asks visitors to confirm holiday and special-event hours.
 
 The estimated prices were chosen as illustrative values within the ranges of published Philippine café menus, including [Brewhas Coffee House](https://brewhascoffeehouse.com/), [Big's Coffee](https://bigscoffee.com/menu/), and [Commune](https://commune.ph/menu/). They are **not** Sabino prices or confirmed products.
 

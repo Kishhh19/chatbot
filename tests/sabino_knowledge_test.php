@@ -15,6 +15,7 @@ $cases = [
     ['what pairs with a croissant?', 'croissant with a latte'],
     ['do you deliver?', 'delivery or pickup'],
     ['what is a flat white?', 'microfoam'],
+    ['what time are you open on Saturday?', '1:00 PM–9:00 PM'],
 ];
 
 $failures = [];
