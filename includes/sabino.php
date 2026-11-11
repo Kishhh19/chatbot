@@ -146,6 +146,12 @@ function sabino_reply(string $question): array {
     } elseif (preg_match('/\b(wifi|wi.fi|parking|pets?|pet.friendly|outlet|socket|work|study|laptop|restroom|toilet|accessib)\b/u', $q)) {
         $reply = "I don’t have verified details yet about Sabino’s Wi-Fi, parking, outlets, pet policy, restrooms, accessibility, or laptop rules. Please [call or text the shop]({$data['phone_link']}) before visiting if one of these is essential. Tell me which amenity you need and I’ll help you form the right question.";
         $suggestions = ['Contact Sabino', 'Find Sabino', 'Opening hours'];
+    } elseif (preg_match('/\b(strong(?:er|est)? coffee.*caffeine|caffeine.*strong(?:er|est)? coffee|dark roast.*caffeine|caffeine.*dark roast)\b/u', $q)) {
+        $reply = "**Strong flavor and high caffeine are not the same thing.** Dark roast can taste bolder, but caffeine depends more on the bean, dose, number of espresso shots, and serving size. For more caffeine, ask about an extra shot; for a bold taste from Sabino’s menu, start with the **Americano (₱130)**.";
+        $suggestions = ['Strong coffee recommendation', 'How many shots are in a drink?', 'Tell me about roast levels'];
+    } elseif (preg_match('/\b(coffee.*sleep|sleep.*coffee|coffee.*bed|bedtime|how late.*coffee|caffeine.*hours?)\b/u', $q)) {
+        $reply = "Caffeine can remain active for several hours and may affect sleep even when you no longer feel energized. If you’re sensitive, avoid coffee late in the day, ask whether decaf is available, or choose a caffeine-free drink. Individual responses vary, so follow medical advice for health concerns.";
+        $suggestions = ['Low-caffeine choices', 'Non-coffee options', 'Show drinks menu'];
     } elseif (preg_match('/\b(caffeine|caffeinated|decaf|wake me|energy|strongest|more caffeine|less caffeine|low caffeine|how many shots|espresso shots?|how strong.*cold brew|cold brew.*strong)\b/u', $q)) {
         if (preg_match('/\b(decaf|less caffeine|low caffeine|sensitive|night|evening)\b/u', $q)) {
             $reply = "For less caffeine, ask whether **decaf espresso** is available, choose a single-shot milk drink, or pick a non-coffee option such as hot chocolate. Matcha still contains caffeine. Exact caffeine depends on the beans, dose, and number of shots, so ask the barista if you’re sensitive.";
@@ -156,7 +162,16 @@ function sabino_reply(string $question): array {
     } elseif (preg_match('/\b(latte vs cappuccino|cappuccino vs latte|difference.*latte.*cappuccino|difference.*cappuccino.*latte)\b/u', $q)) {
         $reply = "A **latte** has more steamed milk and only a light foam layer, so it tastes smoother and milder. A **cappuccino** uses less milk and more foam, so the espresso tastes more pronounced. Pick a latte for creamy and gentle; cappuccino for airy and coffee-forward.";
         $suggestions = ['What is a flat white?', 'Strong coffee recommendation', 'Can drinks be customized?'];
-    } elseif (preg_match('/\b(what is|what\'s|difference|explain).*\b(americano|espresso|latte|cappuccino|flat white|macchiato|mocha|cold brew|spanish latte|matcha)\b/u', $q, $drinkMatch)) {
+    } elseif (preg_match('/\b(flat white vs cappuccino|cappuccino vs flat white|difference.*flat white.*cappuccino)\b/u', $q)) {
+        $reply = "A **flat white** has silky microfoam and less milk than a latte, so it is smooth but coffee-forward. A **cappuccino** has a thicker, airier foam cap. Flat white feels velvety; cappuccino feels lighter and foamier.";
+        $suggestions = ['Latte vs cappuccino', 'What is microfoam?', 'Recommend a milky drink'];
+    } elseif (preg_match('/\b(americano vs brewed coffee|brewed coffee vs americano|difference.*americano.*brewed)\b/u', $q)) {
+        $reply = "An **Americano** is espresso diluted with water; **brewed coffee** is made by passing or steeping water through ground coffee. They can look similar, but an Americano usually has espresso’s concentrated aroma while brewed coffee reflects its filter method.";
+        $suggestions = ['What is espresso?', 'Strong coffee recommendation', 'Show coffee menu'];
+    } elseif (preg_match('/\b(cold brew vs iced coffee|iced coffee vs cold brew|difference.*cold brew.*iced)\b/u', $q)) {
+        $reply = "**Iced coffee** is hot-brewed coffee cooled over ice, so it often tastes brighter. **Cold brew** steeps in cool water for many hours, usually making it smoother and less sharp. Either can be strong; caffeine depends on the recipe and serving size.";
+        $suggestions = ['How much caffeine?', 'Hot or iced?', 'Recommend a refreshing drink'];
+    } elseif (preg_match('/\b(what is|what\'s|difference|explain).*\b(americano|espresso|latte|cappuccino|flat white|macchiato|mocha|cold brew|spanish latte|matcha|cortado|ristretto|lungo|microfoam)\b/u', $q, $drinkMatch)) {
         $drink = $drinkMatch[2];
         $definitions = [
             'espresso' => 'Espresso is a small, concentrated coffee brewed under pressure. It has a bold flavor and forms the base of many café drinks.',
@@ -169,10 +184,35 @@ function sabino_reply(string $question): array {
             'cold brew' => 'Cold brew is coffee steeped in cool water for many hours. It is usually smooth and less sharp, though its caffeine strength varies by recipe.',
             'spanish latte' => 'A Spanish latte is a sweet, creamy espresso drink commonly made with milk and sweetened condensed milk.',
             'matcha' => 'Matcha is finely ground green tea whisked with water or milk. It is not coffee, but it normally contains caffeine.',
+            'cortado' => 'A cortado is espresso balanced with a small, roughly equal amount of warm milk. It is stronger and less milky than a latte.',
+            'ristretto' => 'A ristretto is a shorter espresso extraction using less water. It is concentrated and often tastes sweeter and less bitter than a longer shot.',
+            'lungo' => 'A lungo is an espresso pulled with more water for longer. It makes a larger, more diluted shot and can taste more bitter.',
+            'microfoam' => 'Microfoam is steamed milk with extremely small bubbles, creating a glossy, velvety texture used in lattes and flat whites.',
         ];
         $reply = $definitions[$drink] ?? "That drink can vary by café, so ask the barista how Sabino prepares it.";
         $suggestions = ['Latte vs cappuccino', 'Recommend a drink', 'How much caffeine?'];
-    } elseif (preg_match('/\b(beans?|roast|arabica|robusta|single origin|blend|flavor notes|acidity)\b/u', $q)) {
+    } elseif (preg_match('/\b(light|medium|dark) roast|roast levels?|which roast/u', $q)) {
+        $reply = "**Light roast** usually keeps brighter, fruity or floral notes; **medium roast** balances acidity, sweetness, and body; **dark roast** tastes bolder, roastier, and sometimes smoky. Roast level describes flavor more reliably than caffeine. Sabino’s current roast isn’t listed, so ask the barista.";
+        $suggestions = ['Does dark roast have more caffeine?', 'Arabica vs robusta', 'What are tasting notes?'];
+    } elseif (preg_match('/\b(arabica vs robusta|robusta vs arabica|difference.*arabica.*robusta)\b/u', $q)) {
+        $reply = "**Arabica** is commonly sweeter, more aromatic, and more acidic. **Robusta** is usually earthier, more bitter, fuller-bodied, and higher in caffeine. Many espresso blends combine them for both aroma and strength.";
+        $suggestions = ['Tell me about roast levels', 'What is coffee acidity?', 'Strong coffee recommendation'];
+    } elseif (preg_match('/\b(acidity|coffee body|tasting notes?|flavo(?:u)?r notes?)\b/u', $q)) {
+        $reply = "In coffee, **acidity** means a lively brightness—like citrus or fruit—not necessarily sourness. **Body** is how heavy or rich the drink feels. **Tasting notes** describe flavors the coffee naturally reminds you of, such as chocolate, nuts, caramel, or berries; they are not always added ingredients.";
+        $suggestions = ['Why does coffee taste sour?', 'Arabica vs robusta', 'Tell me about roast levels'];
+    } elseif (preg_match('/\b(crema|foam on espresso)\b/u', $q)) {
+        $reply = "**Crema** is the golden-brown foam on freshly pulled espresso, formed by oils and trapped gas. It can add aroma and texture, but thick crema alone does not guarantee a delicious or well-extracted shot.";
+        $suggestions = ['What is espresso?', 'Why is coffee bitter?', 'What is microfoam?'];
+    } elseif (preg_match('/\b(sour coffee|coffee.*sour|bitter coffee|coffee.*bitter|under.?extract|over.?extract|extraction)\b/u', $q)) {
+        $reply = "Coffee that tastes sharply **sour** may be under-extracted; coffee that tastes harsh, dry, or very **bitter** may be over-extracted. Grind size, water temperature, dose, and brew time all matter. Some pleasant acidity and bitterness are natural, so adjust one brewing variable at a time.";
+        $suggestions = ['What grind size should I use?', 'What is coffee acidity?', 'How should I brew coffee?'];
+    } elseif (preg_match('/\b(store coffee|coffee storage|keep beans|fresh beans|coffee freshness|freeze coffee)\b/u', $q)) {
+        $reply = "Keep coffee beans in an **airtight, opaque container** away from heat, light, moisture, and strong odors. Buy amounts you can use while fresh and grind just before brewing. Avoid repeatedly opening frozen beans because condensation can damage flavor.";
+        $suggestions = ['How fine should I grind coffee?', 'Tell me about coffee beans', 'How should I brew coffee?'];
+    } elseif (preg_match('/\b(grind size|water temperature|brew temperature|coffee ratio|coffee.*water ratio)\b/u', $q)) {
+        $reply = "Use a **fine grind for espresso**, medium for drip or pour-over, and coarse for French press or cold brew. A practical starting water temperature is about **90–96°C**, with roughly **1 part coffee to 15–17 parts water** for filter coffee; then adjust to taste.";
+        $suggestions = ['Why does coffee taste sour?', 'How should I brew coffee?', 'How do I store beans?'];
+    } elseif (preg_match('/\b(beans?|roast|arabica|robusta|single origin|blend)\b/u', $q)) {
         $reply = "Coffee flavor changes with the bean and roast. **Arabica** is often sweeter and more aromatic; **Robusta** is usually bolder and higher in caffeine. Lighter roasts can taste brighter or fruitier, while darker roasts lean toward chocolate, caramel, or smoky notes. I don’t have Sabino’s current bean or roaster details yet, so ask the barista what they are serving today.";
         $suggestions = ['What is acidity in coffee?', 'Strong coffee recommendation', 'How is coffee brewed?'];
     } elseif (preg_match('/\b(brew|pour.over|french press|aeropress|v60|drip|grind size|how.*make coffee)\b/u', $q)) {
@@ -187,7 +227,7 @@ function sabino_reply(string $question): array {
     } elseif (preg_match('/\b(coffee basics|coffee 101|learn about coffee|new to coffee)\b/u', $q)) {
         $reply = "A quick coffee guide: **espresso** is the concentrated base; add water for an Americano, steamed milk for a latte, less milk plus more foam for a cappuccino, or chocolate for a mocha. Cold brew is steeped cold for hours. Start with a latte if you want mild and creamy, or an Americano if you prefer black coffee.";
         $suggestions = ['Latte vs cappuccino', 'Tell me about coffee beans', 'Recommend a drink'];
-    } elseif (preg_match('/\b(recommend|suggest|best|sweet|strong|smooth|creamy|bitter|refreshing|not too sweet|less sweet|budget|under|below|less than|cheap|favorite|favourite|non.coffee|without coffee|hindi kape|matapang|matamis)\b/u', $q)) {
+    } elseif (preg_match('/\b(recommend|suggest|best|sweet|strong|hard coffee|bold|intense|smooth|creamy|milky|milk.forward|lots? of milk|bitter|black coffee|fruity|chocolatey|refreshing|not too sweet|less sweet|budget|under|below|less than|cheap|favorite|favourite|beginner|first coffee|non.coffee|without coffee|hindi kape|matapang|matamis)\b/u', $q)) {
         if (preg_match('/(?:under|below|less than|budget(?: of)?|up to)\s*(?:₱|php\s*)?(\d{2,4})/u', $q, $budgetMatch)) {
             $budget = (int)$budgetMatch[1];
             $options = array_filter($data['menu'], fn($item) => $item['kind'] === 'Drinks' && $item['price'] <= $budget);
@@ -196,22 +236,35 @@ function sabino_reply(string $question): array {
             $reply = $choices
                 ? 'For a drink budget of ₱' . $budget . ', Sabino currently lists ' . implode(', ', $choices) . '.'
                 : 'Sabino’s current drink menu has no listed option within ₱' . $budget . '.';
-        } elseif (preg_match('/\b(non.coffee|without coffee|hindi kape|matcha|chocolate)\b/u', $q)) {
+        } elseif (preg_match('/\b(non.coffee|without coffee|hindi kape)\b/u', $q)) {
             $reply = "For a non-coffee choice, Sabino lists **Dark Chocolate (₱190)**, **Matcha Latte (₱190)**, **Ube (₱200)**, Italian Sodas (₱150), and fruit Teas (₱150). Matcha normally contains caffeine.";
+        } elseif (preg_match('/\b(milky|milk.forward|lots? of milk|creamy|smooth|mild)\b/u', $q)) {
+            $reply = "For a milky drink, start with **Latte (₱150)**—it is the mildest, most milk-forward coffee. Choose **Spanish Latte (₱160)** if you also want sweetness, or **Pistachio Latte (₱250)** for a richer flavored option.";
+        } elseif (preg_match('/\b(hard coffee|strong|bold|intense|matapang|black coffee)\b/u', $q)) {
+            $reply = "If by ‘hard coffee’ you mean bold and coffee-forward, choose **Americano (₱130)**. For a distinctive caffeinated mix, try **Dirty Matcha (₱200)**. Bold taste does not always mean more caffeine, so ask how many espresso shots are included or whether an extra shot is available.";
+        } elseif (preg_match('/\b(beginner|first coffee|new to coffee)\b/u', $q)) {
+            $reply = "For a first coffee, try **Latte (₱150)** for mild and creamy, or **Spanish Latte (₱160)** if you prefer sweet. If you already enjoy black coffee, begin with **Americano (₱130)**.";
+        } elseif (preg_match('/\b(fruity|fruit drink)\b/u', $q)) {
+            $reply = "For fruity drinks, Sabino has **Italian Sodas (₱150)** and **fruit Teas (₱150)**. Try Lychee or Peach for gentle sweetness, Green Apple or Kiwi for a brighter taste, or Strawberry Lemon for sweet-tart flavor.";
+        } elseif (preg_match('/\b(chocolate|chocolatey)\b/u', $q)) {
+            $reply = "For chocolate without coffee, choose **Dark Chocolate (₱190)**. If you want a dessert-like coffee instead, **Tiramisu Latte (₱200)** is the closest fit on Sabino’s listed menu.";
+        } elseif (preg_match('/\b(matcha)\b/u', $q)) {
+            $reply = "Choose **Matcha Latte (₱190)** for creamy green tea without coffee, or **Dirty Matcha (₱200)** for matcha plus espresso. Matcha still contains caffeine, though the amount varies by recipe.";
         } elseif (preg_match('/\b(not too sweet|less sweet)\b/u', $q)) {
             $reply = "For something not too sweet, start with an **Americano (₱130)** or **Latte (₱150)**. Ask the barista whether sweetness can be reduced for flavored drinks.";
         } elseif (preg_match('/\b(refreshing|cold|iced)\b/u', $q)) {
             $reply = "For a refreshing choice, try any **Italian Soda (₱150)** or fruit **Tea (₱150)**. Lychee, Green Apple, Peach, and Strawberry Lemon are easy starting points.";
-        } elseif (preg_match('/\b(creamy|smooth|mild)\b/u', $q)) {
-            $reply = "For creamy and smooth, choose a **Latte (₱150)**. A **Spanish Latte (₱160)** is a sweeter option, while **Pistachio Latte (₱250)** is the most distinctive flavored latte on the menu.";
         } elseif (preg_match('/\b(sweet|matamis|chocolate)\b/u', $q)) {
             $reply = "For a sweeter coffee, try **Spanish Latte (₱160)**, **Caramel Macchiato (₱190)**, or **Tiramisu Latte (₱200)**. For no coffee, try **Dark Chocolate (₱190)**.";
-        } elseif (preg_match('/\b(strong|matapang|black)\b/u', $q)) {
-            $reply = "For a bold, straightforward coffee, choose the **Americano (₱130)**. If you want something creamy with coffee and matcha together, try **Dirty Matcha (₱200)**.";
+        } elseif (preg_match('/\b(bitter)\b/u', $q)) {
+            $reply = "For a clean, unsweetened coffee with some bitterness, choose **Americano (₱130)**. Ask for no sugar. If you want strong flavor with less bitterness, a Latte (₱150) softens the espresso with milk.";
         } else {
             $reply = "A simple starting point from Sabino’s menu: **Americano (₱130)** for black coffee, **Latte (₱150)** for something creamy, or **Lychee Mango Tea (₱150)** for something fruity.";
         }
         $suggestions = ['Show drinks menu', 'Show food menu', 'Opening hours'];
+    } elseif (preg_match('/\b(coffee|espresso|caffeine|beans?|roast|brew|kape)\b/u', $q) && !preg_match('/\b(show|menu|price|cost|how much|magkano)\b/u', $q)) {
+        $reply = "I can answer that coffee question, but I may need one more detail. Are you asking about **choosing a drink, caffeine, beans and roast, brewing, milk, flavor, or customization**? For example: “Which Sabino drink is milky?”, “Why is coffee sour?”, or “Does dark roast have more caffeine?”";
+        $suggestions = ['Recommend a milky drink', 'Strong coffee recommendation', 'Coffee basics'];
     } elseif (preg_match('/\b(menu|prices?|cost|much|drinks?|beverages?|coffee|latte|americano|soda|tea|specialty|food|starters?|salad|soup|rice meals?|pasta|sandwich|burger|wings?|add.ons?|presyo|magkano|kape|pagkain)\b/u', $q)) {
         $kind = null;
         if (preg_match('/\b(food|starters?|salad|soup|rice meals?|pasta|sandwich|burger|wings?|add.ons?|pagkain)\b/u', $q)) $kind = 'Food';
@@ -238,8 +291,9 @@ function sabino_reply(string $question): array {
         $suggestions = ['Recommend a drink', 'Coffee basics', 'Visit Sabino'];
     } else {
         $matched = false;
-        $reply = "I’m not certain what you mean yet, but I can help with **coffee drinks, customization, caffeine, beans, brewing, food pairings, ordering questions, and visiting Sabino**. Try asking something like “What’s the difference between a latte and cappuccino?” or “Recommend a not-too-sweet drink.” For a Sabino-specific detail I can’t verify, [call or text the shop]({$data['phone_link']}).";
-        $suggestions = ['Recommend a drink', 'Latte vs cappuccino', 'Can I customize a drink?'];
+        $reply = "I may not have understood the exact term, but I can help with **drink recommendations, coffee definitions, caffeine, beans and roast, brewing, customization, food pairings, or visiting Sabino**. Tell me the taste you want—milky, strong, sweet, bitter, fruity, or refreshing—or ask a specific coffee question. For a Sabino detail I can’t verify, [call or text the shop]({$data['phone_link']}).";
+        $suggestions = ['Recommend a milky drink', 'Strong coffee recommendation', 'Coffee basics'];
     }
     return ['content' => $reply, 'suggestions' => $suggestions, 'matched' => $matched];
 }
+
