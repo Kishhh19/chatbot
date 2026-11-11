@@ -1,10 +1,10 @@
 # Sabino website + Sabinox café helper
 
-The customer page at `index.php` is now a complete responsive Sabino coffee-shop website. It includes brand and story sections, a **sample menu with estimated Philippine café prices**, directions, hours, contact links, and an embedded Sabinox helper. It works without an account or AI API key. Customer chat history is kept in the browser session; **New chat** clears it.
+The customer page at `index.php` is a complete responsive Sabino coffee-shop website. It includes brand and story sections, the shop’s **current drinks and food menu with prices**, directions, hours, contact links, and an embedded Sabinox helper. It works without an account or AI API key. Customer chat history is kept in the browser session; **New chat** clears it.
 
-The shop facts, profile hours, and all provisional menu items live in `includes/sabino.php`. When Sabino provides its exact menu, replace `sample_menu` there and update the sample labels in `index.php`. Sabinox currently reports Monday–Friday 9:00 AM–10:00 PM, Saturday 1:00 PM–9:00 PM, and Sunday closed; it asks visitors to confirm holiday and special-event hours.
+The shop facts, profile hours, and official menu items live in `includes/sabino.php`. The menu is separated into Drinks and Food, then grouped by the categories used on Sabino’s boards. Sabinox currently reports Monday–Friday 9:00 AM–10:00 PM, Saturday 1:00 PM–9:00 PM, and Sunday closed; it asks visitors to confirm holiday and special-event hours.
 
-The estimated prices were chosen as illustrative values within the ranges of published Philippine café menus, including [Brewhas Coffee House](https://brewhascoffeehouse.com/), [Big's Coffee](https://bigscoffee.com/menu/), and [Commune](https://commune.ph/menu/). They are **not** Sabino prices or confirmed products.
+Sabinox can return the complete menu or separate Drinks and Food lists. It also answers exact price questions such as “How much is Carbonara?” and correctly handles the solo and sharing prices for wings.
 
 The existing account, admin, and knowledge-base platform remains available through `login.php`, `admin/`, and `workspace.php`. Staff tools require the MySQL setup described below; the customer FAQ page does not.
 

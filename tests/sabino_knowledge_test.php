@@ -12,10 +12,14 @@ $cases = [
     ['what milk suits coffee?', 'Whole milk'],
     ['teach me coffee basics', 'espresso'],
     ['recommend a not too sweet drink', 'not too sweet'],
-    ['what pairs with a croissant?', 'croissant with a latte'],
+    ['what pairs well with food?', 'PB & J with a Latte'],
     ['do you deliver?', 'delivery or pickup'],
     ['what is a flat white?', 'microfoam'],
     ['what time are you open on Saturday?', '1:00 PM–9:00 PM'],
+    ['show drinks menu', 'Tiramisu Latte — ₱200'],
+    ['show food menu', 'Carbonara — ₱270'],
+    ['how much is BBQ Jalapeño Burger?', '₱300'],
+    ['how much are buffalo wings?', '₱240 solo / ₱550 sharing'],
 ];
 
 $failures = [];

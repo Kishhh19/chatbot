@@ -42,6 +42,10 @@ function formatReply(value) {
   html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
   return html.split(/\n\n+/).map(part => {
     if (part.startsWith('- ')) return `<ul>${part.split('\n').map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>`;
+    if (part.includes('\n- ')) {
+      const [heading, ...lines] = part.split('\n');
+      return `<p>${heading}</p><ul>${lines.map(line => `<li>${line.replace(/^- /, '')}</li>`).join('')}</ul>`;
+    }
     return `<p>${part.replace(/\n/g, '<br>')}</p>`;
   }).join('');
 }
@@ -113,6 +117,10 @@ navToggle.addEventListener('click', () => {
   navToggle.setAttribute('aria-expanded', String(open));
 });
 siteNav.querySelectorAll('a').forEach(link => link.addEventListener('click', () => { siteNav.classList.remove('open'); navToggle.setAttribute('aria-expanded', 'false'); }));
+document.querySelectorAll('[data-menu-filter]').forEach(button => button.addEventListener('click', () => {
+  document.querySelectorAll('[data-menu-filter]').forEach(item => item.classList.toggle('active', item === button));
+  document.querySelectorAll('[data-menu-kind]').forEach(section => section.classList.toggle('active', section.dataset.menuKind === button.dataset.menuFilter));
+}));
 document.getElementById('new-chat').addEventListener('click', async () => {
   if (busy) return;
   touched = true;

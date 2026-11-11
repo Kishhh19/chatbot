@@ -1,5 +1,5 @@
 <?php
-/** Customer-facing Sabino facts. Replace sample_menu when the official menu arrives. */
+/** Customer-facing Sabino facts and the official menu supplied by the shop. */
 function sabino_data(): array {
     return [
         'name' => 'Sabino',
@@ -15,27 +15,95 @@ function sabino_data(): array {
             ['days' => 'Saturday', 'time' => '1:00 PM–9:00 PM'],
             ['days' => 'Sunday', 'time' => 'Closed'],
         ],
-        'sample_menu' => [
-            ['name' => 'Americano', 'price' => 100, 'type' => 'Coffee', 'note' => 'Espresso and water'],
-            ['name' => 'Café Latte', 'price' => 140, 'type' => 'Coffee', 'note' => 'Espresso with milk'],
-            ['name' => 'Cappuccino', 'price' => 140, 'type' => 'Coffee', 'note' => 'Espresso, milk, and foam'],
-            ['name' => 'Spanish Latte', 'price' => 155, 'type' => 'Coffee', 'note' => 'Sweet, creamy espresso drink'],
-            ['name' => 'Mocha', 'price' => 155, 'type' => 'Coffee', 'note' => 'Espresso and chocolate'],
-            ['name' => 'Cold Brew', 'price' => 145, 'type' => 'Coffee', 'note' => 'Slow-steeped coffee'],
-            ['name' => 'Matcha Latte', 'price' => 155, 'type' => 'Non-coffee', 'note' => 'Matcha and milk'],
-            ['name' => 'Hot Chocolate', 'price' => 125, 'type' => 'Non-coffee', 'note' => 'Chocolate drink'],
-            ['name' => 'Butter Croissant', 'price' => 115, 'type' => 'Pastry', 'note' => 'Flaky pastry'],
-            ['name' => 'Chocolate Cookie', 'price' => 85, 'type' => 'Pastry', 'note' => 'Sweet café snack'],
+        'menu' => [
+            ['name'=>'Americano','price'=>130,'kind'=>'Drinks','category'=>'Coffee'],
+            ['name'=>'Latte','price'=>150,'kind'=>'Drinks','category'=>'Coffee'],
+            ['name'=>'Spanish Latte','price'=>160,'kind'=>'Drinks','category'=>'Coffee'],
+            ['name'=>'Caramel Macchiato','price'=>190,'kind'=>'Drinks','category'=>'Coffee'],
+            ['name'=>'Sea Salt Latte','price'=>190,'kind'=>'Drinks','category'=>'Coffee'],
+            ['name'=>'Tiramisu Latte','price'=>200,'kind'=>'Drinks','category'=>'Coffee'],
+            ['name'=>'Lychee','price'=>150,'kind'=>'Drinks','category'=>'Italian Soda'],
+            ['name'=>'Strawberry','price'=>150,'kind'=>'Drinks','category'=>'Italian Soda'],
+            ['name'=>'Kiwi','price'=>150,'kind'=>'Drinks','category'=>'Italian Soda'],
+            ['name'=>'Green Apple','price'=>150,'kind'=>'Drinks','category'=>'Italian Soda'],
+            ['name'=>'Blueberry','price'=>150,'kind'=>'Drinks','category'=>'Italian Soda'],
+            ['name'=>'Grapes','price'=>150,'kind'=>'Drinks','category'=>'Italian Soda'],
+            ['name'=>'Peach','price'=>150,'kind'=>'Drinks','category'=>'Italian Soda'],
+            ['name'=>'Passion Fruit','price'=>150,'kind'=>'Drinks','category'=>'Italian Soda'],
+            ['name'=>'Coke Float','price'=>150,'kind'=>'Drinks','category'=>'Specialty'],
+            ['name'=>'Apollo','price'=>180,'kind'=>'Drinks','category'=>'Specialty'],
+            ['name'=>'Dark Chocolate','price'=>190,'kind'=>'Drinks','category'=>'Specialty'],
+            ['name'=>'Matcha Latte','price'=>190,'kind'=>'Drinks','category'=>'Specialty'],
+            ['name'=>'Georgia','price'=>190,'kind'=>'Drinks','category'=>'Specialty'],
+            ['name'=>'Dirty Matcha','price'=>200,'kind'=>'Drinks','category'=>'Specialty'],
+            ['name'=>'Ube','price'=>200,'kind'=>'Drinks','category'=>'Specialty'],
+            ['name'=>'Pistachio Latte','price'=>250,'kind'=>'Drinks','category'=>'Specialty'],
+            ['name'=>'Lychee Mango','price'=>150,'kind'=>'Drinks','category'=>'Tea'],
+            ['name'=>'Peach Mango','price'=>150,'kind'=>'Drinks','category'=>'Tea'],
+            ['name'=>'Strawberry Lemon','price'=>150,'kind'=>'Drinks','category'=>'Tea'],
+            ['name'=>'Strawberry Peach','price'=>150,'kind'=>'Drinks','category'=>'Tea'],
+            ['name'=>'Kiwi','price'=>150,'kind'=>'Drinks','category'=>'Tea'],
+            ['name'=>'Mi Goreng','price'=>150,'kind'=>'Food','category'=>'Starters'],
+            ['name'=>'Onion Rings','price'=>200,'kind'=>'Food','category'=>'Starters'],
+            ['name'=>'Animal Style Fries','price'=>250,'kind'=>'Food','category'=>'Starters'],
+            ['name'=>'Nachos','price'=>270,'kind'=>'Food','category'=>'Starters'],
+            ['name'=>'Caesar Salad','price'=>250,'kind'=>'Food','category'=>'Salad'],
+            ['name'=>'Mushroom','price'=>150,'kind'=>'Food','category'=>'Soup'],
+            ['name'=>'Crab and Corn','price'=>150,'kind'=>'Food','category'=>'Soup'],
+            ['name'=>'Spam','price'=>190,'kind'=>'Food','category'=>'Rice Meals'],
+            ['name'=>'Tocino','price'=>200,'kind'=>'Food','category'=>'Rice Meals'],
+            ['name'=>'Bacon','price'=>220,'kind'=>'Food','category'=>'Rice Meals'],
+            ['name'=>'Tapa','price'=>230,'kind'=>'Food','category'=>'Rice Meals'],
+            ['name'=>'Burger Steak','price'=>230,'kind'=>'Food','category'=>'Rice Meals'],
+            ['name'=>'Fried Chicken','price'=>230,'kind'=>'Food','category'=>'Rice Meals'],
+            ['name'=>'Breaded Porkchop','price'=>230,'kind'=>'Food','category'=>'Rice Meals'],
+            ['name'=>'Carbonara','price'=>270,'kind'=>'Food','category'=>'Pasta'],
+            ['name'=>'Aglio Olio','price'=>300,'kind'=>'Food','category'=>'Pasta'],
+            ['name'=>'Chicken Pesto','price'=>300,'kind'=>'Food','category'=>'Pasta'],
+            ['name'=>'Spaghetti & Meatballs','price'=>300,'kind'=>'Food','category'=>'Pasta'],
+            ['name'=>'PB & J','price'=>150,'kind'=>'Food','category'=>'Special Sandwiches'],
+            ['name'=>'Tuna','price'=>170,'kind'=>'Food','category'=>'Special Sandwiches'],
+            ['name'=>'Cheeseburger','price'=>220,'kind'=>'Food','category'=>'Special Sandwiches'],
+            ['name'=>'B.E.L.T.','price'=>250,'kind'=>'Food','category'=>'Special Sandwiches'],
+            ['name'=>'Crispy Chicken Burger','price'=>250,'kind'=>'Food','category'=>'Special Sandwiches'],
+            ['name'=>'Buffalo Chicken Burger','price'=>290,'kind'=>'Food','category'=>'Special Sandwiches'],
+            ['name'=>'BBQ Jalapeño Burger','price'=>300,'kind'=>'Food','category'=>'Special Sandwiches'],
+            ['name'=>'Rice','price'=>25,'kind'=>'Food','category'=>'Add-ons'],
+            ['name'=>'Egg','price'=>25,'kind'=>'Food','category'=>'Add-ons'],
+            ['name'=>'Garlic Mayo','price'=>30,'kind'=>'Food','category'=>'Add-ons'],
+            ['name'=>'Gravy','price'=>30,'kind'=>'Food','category'=>'Add-ons'],
+            ['name'=>'Garlic Bread','price'=>40,'kind'=>'Food','category'=>'Add-ons'],
+            ['name'=>'Ranch','price'=>50,'kind'=>'Food','category'=>'Add-ons'],
+            ['name'=>'Roasted Sesame','price'=>60,'kind'=>'Food','category'=>'Add-ons'],
+            ['name'=>'Buffalo','price'=>240,'sharing_price'=>550,'kind'=>'Food','category'=>'Wings'],
+            ['name'=>'Honey Sriracha','price'=>240,'sharing_price'=>550,'kind'=>'Food','category'=>'Wings'],
+            ['name'=>'Soy Garlic','price'=>240,'sharing_price'=>550,'kind'=>'Food','category'=>'Wings'],
+            ['name'=>'Garlic Parmesan','price'=>240,'sharing_price'=>550,'kind'=>'Food','category'=>'Wings'],
         ],
     ];
 }
 
-function sabino_menu_text(array $data, ?string $type = null): string {
-    $items = array_filter($data['sample_menu'], fn($item) => !$type || $item['type'] === $type);
-    $lines = array_map(fn($item) => '- ' . $item['name'] . ' — ₱' . $item['price'] . ' · ' . $item['note'], $items);
-    return "**Sample menu and estimated prices only** — these are Philippine café examples, not confirmed Sabino offerings or prices.\n\n"
-        . implode("\n", $lines)
-        . "\n\nPlease call **{$data['phone']}** for Sabino’s current menu, availability, and exact prices.";
+function sabino_menu_text(array $data, ?string $kind = null): string {
+    $kinds = $kind ? [$kind] : ['Drinks', 'Food'];
+    $sections = [];
+    foreach ($kinds as $currentKind) {
+        $groups = [];
+        foreach ($data['menu'] as $item) {
+            if ($item['kind'] === $currentKind) $groups[$item['category']][] = $item;
+        }
+        $blocks = ["**" . strtoupper($currentKind) . "**"];
+        foreach ($groups as $category => $items) {
+            $lines = ["**{$category}**"];
+            foreach ($items as $item) {
+                $price = '₱' . $item['price'];
+                if (isset($item['sharing_price'])) $price .= ' solo / ₱' . $item['sharing_price'] . ' sharing';
+                $lines[] = '- ' . $item['name'] . ' — ' . $price;
+            }
+            $blocks[] = implode("\n", $lines);
+        }
+        $sections[] = implode("\n\n", $blocks);
+    }
+    return implode("\n\n", $sections) . "\n\nAvailability can change. [Call or text Sabino]({$data['phone_link']}) for today’s items.";
 }
 
 function sabino_reply(string $question): array {
@@ -43,17 +111,17 @@ function sabino_reply(string $question): array {
     $q = mb_strtolower(trim($question));
     $reply = '';
     $matched = true;
-    $suggestions = ['Sample menu', 'Opening hours', 'Find Sabino'];
+    $suggestions = ['Full menu', 'Opening hours', 'Find Sabino'];
 
     if (preg_match('/\b(where|address|location|located|directions|map|find|visit|saan|nasaan|pupunta|salapungan)\b/u', $q)) {
         $reply = "Sabino is at **{$data['address']}**. [Open directions]({$data['maps']}).";
-        $suggestions = ['Opening hours', 'Contact Sabino', 'Sample menu'];
+        $suggestions = ['Opening hours', 'Contact Sabino', 'Full menu'];
     } elseif (preg_match('/\b(hours?|opening|opens?|closing|closes?|closed|today|tomorrow|sunday|monday|saturday|oras|bukas|sarado|schedule)\b/u', $q)) {
         $reply = "**Reported hours:** {$data['hours']} [Call to confirm]({$data['phone_link']}).";
-        $suggestions = ['Find Sabino', 'Contact Sabino', 'Sample menu'];
+        $suggestions = ['Find Sabino', 'Contact Sabino', 'Full menu'];
     } elseif (preg_match('/\b(phone|number|contact|call|text|message|instagram|ig|social|tawag|telepono)\b/u', $q)) {
         $reply = "You can [call or text Sabino]({$data['phone_link']}) at **{$data['phone']}**, or visit [their Instagram]({$data['instagram']}).";
-        $suggestions = ['Find Sabino', 'Opening hours', 'Sample menu'];
+        $suggestions = ['Find Sabino', 'Opening hours', 'Full menu'];
     } elseif (preg_match('/\b(do you know|who is|who\'s|kilala mo|staff|owner|manager|barista|employee|crew)\b/u', $q)) {
         $reply = "I don’t have a verified staff or owner directory for Sabino, so I can’t confirm whether a named person works there. For a staff-related question, please [contact Sabino]({$data['phone_link']}) directly. I can still help with coffee choices and general café questions.";
         $suggestions = ['Recommend a drink', 'Coffee basics', 'Contact Sabino'];
@@ -68,13 +136,13 @@ function sabino_reply(string $question): array {
         $suggestions = ['Non-coffee options', 'Can drinks be customized?', 'Contact Sabino'];
     } elseif (preg_match('/\b(deliver(?:y|ies|ed)?|pickup|takeout|take away|order online|advance order|pre.order)\b/u', $q)) {
         $reply = "I can’t confirm Sabino’s current delivery or pickup setup yet. The quickest option is to [call or text {$data['phone']}]({$data['phone_link']}) and ask about same-day availability, preparation time, payment, and pickup instructions.";
-        $suggestions = ['Contact Sabino', 'Sample menu', 'Opening hours'];
+        $suggestions = ['Contact Sabino', 'Full menu', 'Opening hours'];
     } elseif (preg_match('/\b(reserve|reservation|book|table|event|group|function)\b/u', $q)) {
         $reply = "For tables, groups, or events, please [contact Sabino]({$data['phone_link']}) first. Ask about party size, preferred date and time, minimum spend, deposits, and how long the table can be held. I don’t have a confirmed reservation policy yet.";
         $suggestions = ['Contact Sabino', 'Opening hours', 'Find Sabino'];
     } elseif (preg_match('/\b(payment|pay|gcash|maya|card|cash|credit|debit)\b/u', $q)) {
         $reply = "Sabino’s accepted payment methods haven’t been confirmed. It’s best to bring a backup payment method and [ask the shop]({$data['phone_link']}) whether they currently accept cash, GCash/Maya, or cards.";
-        $suggestions = ['Contact Sabino', 'Sample menu', 'Find Sabino'];
+        $suggestions = ['Contact Sabino', 'Full menu', 'Find Sabino'];
     } elseif (preg_match('/\b(wifi|wi.fi|parking|pets?|pet.friendly|outlet|socket|work|study|laptop|restroom|toilet|accessib)\b/u', $q)) {
         $reply = "I don’t have verified details yet about Sabino’s Wi-Fi, parking, outlets, pet policy, restrooms, accessibility, or laptop rules. Please [call or text the shop]({$data['phone_link']}) before visiting if one of these is essential. Tell me which amenity you need and I’ll help you form the right question.";
         $suggestions = ['Contact Sabino', 'Find Sabino', 'Opening hours'];
@@ -111,8 +179,8 @@ function sabino_reply(string $question): array {
         $reply = "Brewing changes the cup: **espresso** is concentrated and pressure-brewed, **pour-over** is clean and aromatic, **French press** is fuller-bodied, and **cold brew** is smooth from long steeping. Grind size, water temperature, dose, and brew time all affect flavor. Ask Sabino which brewing methods are currently available.";
         $suggestions = ['Tell me about coffee beans', 'What is cold brew?', 'Recommend a drink'];
     } elseif (preg_match('/\b(pair|pairs|paired|pairing|goes with|eat with|food with|pastry with|snack with)\b/u', $q)) {
-        $reply = "For an easy pairing, try a **croissant with a latte or cappuccino**, a **chocolate cookie with Americano or cold brew**, or a lighter pastry with matcha. Rich food usually pairs well with a cleaner black coffee, while buttery pastries suit milk drinks. The pastries shown here are sample items, so check Sabino’s current display.";
-        $suggestions = ['Sample pastries', 'Recommend a drink', 'Coffee basics'];
+        $reply = "From Sabino’s current menu, try **PB & J with a Latte**, **Carbonara with an Americano**, or **Wings with an Italian Soda or Tea**. Those pairings balance creamy, savory, and refreshing flavors, but you can mix them however you like.";
+        $suggestions = ['Show food menu', 'Show drinks menu', 'Recommend a drink'];
     } elseif (preg_match('/\b(hot or iced|hot vs iced|iced or hot|temperature|too hot)\b/u', $q)) {
         $reply = "Choose **hot** for more aroma and a softer milk texture; choose **iced** for a colder, more refreshing drink. Ice can dilute the cup as it melts, so an iced drink may be brewed stronger. You can usually request less ice, but Sabino’s exact options should be confirmed when ordering.";
         $suggestions = ['Can drinks be customized?', 'Recommend a refreshing drink', 'How strong is cold brew?'];
@@ -122,33 +190,51 @@ function sabino_reply(string $question): array {
     } elseif (preg_match('/\b(recommend|suggest|best|sweet|strong|smooth|creamy|bitter|refreshing|not too sweet|less sweet|budget|under|below|less than|cheap|favorite|favourite|non.coffee|without coffee|hindi kape|matapang|matamis)\b/u', $q)) {
         if (preg_match('/(?:under|below|less than|budget(?: of)?|up to)\s*(?:₱|php\s*)?(\d{2,4})/u', $q, $budgetMatch)) {
             $budget = (int)$budgetMatch[1];
-            $options = array_filter($data['sample_menu'], fn($item) => $item['type'] !== 'Pastry' && $item['price'] <= $budget);
-            $choices = array_map(fn($item) => $item['name'] . ' (sample ₱' . $item['price'] . ')', $options);
+            $options = array_filter($data['menu'], fn($item) => $item['kind'] === 'Drinks' && $item['price'] <= $budget);
+            $choices = array_map(fn($item) => $item['name'] . ' (₱' . $item['price'] . ')', $options);
+            $choices = array_values(array_unique($choices));
             $reply = $choices
-                ? 'For a sample drink budget of ₱' . $budget . ', consider ' . implode(', ', $choices) . '. These are estimates only, not confirmed Sabino prices or offerings.'
-                : 'The sample drink list has no option within ₱' . $budget . '. Please ask Sabino about its current menu and prices.';
+                ? 'For a drink budget of ₱' . $budget . ', Sabino currently lists ' . implode(', ', $choices) . '.'
+                : 'Sabino’s current drink menu has no listed option within ₱' . $budget . '.';
         } elseif (preg_match('/\b(non.coffee|without coffee|hindi kape|matcha|chocolate)\b/u', $q)) {
-            $reply = "If you want a drink without coffee, the **sample menu** has Matcha Latte (₱155) and Hot Chocolate (₱125). These are suggestions only; Sabino’s actual selection and prices are unconfirmed.";
+            $reply = "For a non-coffee choice, Sabino lists **Dark Chocolate (₱190)**, **Matcha Latte (₱190)**, **Ube (₱200)**, Italian Sodas (₱150), and fruit Teas (₱150). Matcha normally contains caffeine.";
         } elseif (preg_match('/\b(not too sweet|less sweet)\b/u', $q)) {
-            $reply = "For something not too sweet, try an **Americano**, **cappuccino**, or an unsweetened **café latte**. A latte is the smoothest choice; ask for no syrup or reduced sweetness. The names and prices shown are sample ideas, so confirm Sabino’s current menu.";
+            $reply = "For something not too sweet, start with an **Americano (₱130)** or **Latte (₱150)**. Ask the barista whether sweetness can be reduced for flavored drinks.";
         } elseif (preg_match('/\b(refreshing|cold|iced)\b/u', $q)) {
-            $reply = "For a refreshing choice, try an **iced Americano** for crisp black coffee, **cold brew** for a smoother taste, or an **iced matcha latte** without coffee. Ask what Sabino has available today and whether sweetness can be adjusted.";
+            $reply = "For a refreshing choice, try any **Italian Soda (₱150)** or fruit **Tea (₱150)**. Lychee, Green Apple, Peach, and Strawberry Lemon are easy starting points.";
         } elseif (preg_match('/\b(creamy|smooth|mild)\b/u', $q)) {
-            $reply = "For creamy and smooth, choose a **café latte**. A **Spanish latte** is creamier and sweeter, while a **flat white** is silky with a stronger coffee taste. Ask Sabino which versions are available.";
+            $reply = "For creamy and smooth, choose a **Latte (₱150)**. A **Spanish Latte (₱160)** is a sweeter option, while **Pistachio Latte (₱250)** is the most distinctive flavored latte on the menu.";
         } elseif (preg_match('/\b(sweet|matamis|chocolate)\b/u', $q)) {
-            $reply = "For a sweeter coffee idea, try a **Spanish Latte (sample ₱155)** or **Mocha (sample ₱155)**. Please check with Sabino for what they currently serve.";
+            $reply = "For a sweeter coffee, try **Spanish Latte (₱160)**, **Caramel Macchiato (₱190)**, or **Tiramisu Latte (₱200)**. For no coffee, try **Dark Chocolate (₱190)**.";
         } elseif (preg_match('/\b(strong|matapang|black)\b/u', $q)) {
-            $reply = "For a bold coffee idea, consider an **Americano (sample ₱100)** or **Cold Brew (sample ₱145)**. Actual Sabino availability and prices may differ.";
+            $reply = "For a bold, straightforward coffee, choose the **Americano (₱130)**. If you want something creamy with coffee and matcha together, try **Dirty Matcha (₱200)**.";
         } else {
-            $reply = "A simple starting point: **Americano (sample ₱100)** for black coffee, **Café Latte (sample ₱140)** for something creamy, or **Matcha Latte (sample ₱155)** without coffee. These are Philippine café examples, not Sabino’s confirmed menu.";
+            $reply = "A simple starting point from Sabino’s menu: **Americano (₱130)** for black coffee, **Latte (₱150)** for something creamy, or **Lychee Mango Tea (₱150)** for something fruity.";
         }
-        $suggestions = ['Sample menu', 'Contact Sabino', 'Opening hours'];
-    } elseif (preg_match('/\b(menu|prices?|cost|much|drinks?|coffee|latte|cappuccino|americano|mocha|pastries|pastry|croissant|cookie|food|snack|matcha|presyo|magkano|kape)\b/u', $q)) {
-        $type = preg_match('/\b(pastry|pastries|croissant|cookie|food|snack)\b/u', $q) ? 'Pastry' : (preg_match('/\b(matcha|non.coffee|hot chocolate)\b/u', $q) ? 'Non-coffee' : null);
-        $reply = sabino_menu_text($data, $type);
-        $suggestions = ['Recommend a drink', 'Contact Sabino', 'Find Sabino'];
+        $suggestions = ['Show drinks menu', 'Show food menu', 'Opening hours'];
+    } elseif (preg_match('/\b(menu|prices?|cost|much|drinks?|beverages?|coffee|latte|americano|soda|tea|specialty|food|starters?|salad|soup|rice meals?|pasta|sandwich|burger|wings?|add.ons?|presyo|magkano|kape|pagkain)\b/u', $q)) {
+        $kind = null;
+        if (preg_match('/\b(food|starters?|salad|soup|rice meals?|pasta|sandwich|burger|wings?|add.ons?|pagkain)\b/u', $q)) $kind = 'Food';
+        elseif (preg_match('/\b(drinks?|beverages?|coffee|latte|americano|soda|tea|specialty|kape)\b/u', $q)) $kind = 'Drinks';
+        $found = [];
+        foreach ($data['menu'] as $item) {
+            $needle = mb_strtolower($item['name']);
+            if (mb_strlen($needle) >= 5 && str_contains($q, $needle)) $found[] = $item;
+        }
+        if ($found) {
+            $lines = [];
+            foreach ($found as $item) {
+                $price = '₱' . $item['price'];
+                if (isset($item['sharing_price'])) $price .= ' solo / ₱' . $item['sharing_price'] . ' sharing';
+                $lines[] = '- **' . $item['name'] . '** — ' . $price . ' · ' . $item['category'];
+            }
+            $reply = "Here’s the exact price from Sabino’s menu:\n\n" . implode("\n", $lines);
+        } else {
+            $reply = sabino_menu_text($data, $kind);
+        }
+        $suggestions = $kind === 'Food' ? ['Show drinks menu', 'Recommend a drink', 'Find Sabino'] : ($kind === 'Drinks' ? ['Show food menu', 'Recommend a drink', 'Find Sabino'] : ['Recommend a drink', 'Show food menu', 'Find Sabino']);
     } elseif (preg_match('/\b(hello|hi|hey|good morning|good afternoon|kumusta|salamat|thanks|help|faq|sabinox|sabino|who are you)\b/u', $q)) {
-        $reply = "Hi! I’m **Sabinox**, Sabino’s café helper. I can help with drink recommendations, coffee basics, customization, caffeine, food pairings, the sample menu, and confirmed shop details such as the location and phone number. What are you curious about?";
+        $reply = "Hi! I’m **Sabinox**, Sabino’s café helper. I can show Sabino’s current drinks and food menus with exact prices, recommend a drink, explain coffee, and help with location, hours, or contact details. What are you curious about?";
         $suggestions = ['Recommend a drink', 'Coffee basics', 'Visit Sabino'];
     } else {
         $matched = false;
