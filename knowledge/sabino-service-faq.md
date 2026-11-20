@@ -8,7 +8,15 @@ Last reviewed: November 2026. Use these answers for Sabino-specific customer que
 
 **Can staff see my order from the QR code?** Yes. The QR code opens a signed Sabino order summary containing the order number, customer name or reference, chosen items, quantities, total, creation time, and payment status. A changed or fake code will fail verification.
 
-**Can I pay online or in advance?** When Sabino’s verified PayMongo merchant checkout is enabled, the confirmed order can be paid through the secure hosted checkout using the payment methods activated for Sabino. Until the merchant account is connected, the website can create and verify the order QR but cannot accept online payment. Pay at the shop using a method confirmed by staff.
+**Can I pay online or in advance? Can I use QR payment, GCash, or Maya?** The website currently creates a secure order QR for staff verification; it is not a GCash, Maya, or bank payment QR. Online QR payment becomes available only after Sabino’s verified PayMongo merchant account is activated. Until then, confirm the order, show the order QR to staff, and pay cash at the shop.
+
+**Can I pay cash? How does cash payment work?** Yes. Build and confirm the order on the website, show the secure order QR to staff, and pay cash at the counter after staff verifies the items and total. The order QR does not mean the order is already paid.
+
+**Can I order two, three, or more items through Sabinox?** Yes. Tell Sabinox all items in one message, including quantities when needed. Examples: “I want an Americano and Carbonara,” “Order 2 Lattes, 1 Carbonara, and 3 Nachos,” or “Add an Americano, Tapa, and Garlic Bread.” Sabinox identifies the menu items, displays each subtotal and the estimated total, and offers an Add to Order button. Always review the cart before confirming.
+
+**What happens if I mention both a drink and food in one message?** Sabinox should treat them as one mixed order when the request contains menu items and ordering language. It must list drinks and food separately as individual order lines, preserve quantities, calculate the menu total, and ask the customer to add the result to Order Review. It must not silently submit an order.
+
+**Can I change quantities or add more items after Sabinox recognizes my order?** Yes. Add the recognized items to Order Review, then use the plus and minus controls or continue browsing the menu. The final QR is created only after the customer reviews and confirms the current cart.
 
 **How do I know my order is correct before paying?** The website always shows a review step with every item, quantity, price, and total. Check the summary and confirm it before the QR code or payment button is created.
 
@@ -22,7 +30,7 @@ Last reviewed: November 2026. Use these answers for Sabino-specific customer que
 
 **Do you have allergy, vegan, vegetarian, halal, gluten-free, or nutrition information?** Sabino’s complete ingredient, allergen, dietary, and nutrition list is not yet verified. Tell staff the exact ingredient you must avoid. Shared equipment may cause cross-contact.
 
-**What payment methods does Sabino accept at the shop?** In-store payment methods have not yet been verified. Ask staff whether cash, GCash, Maya, or cards are currently accepted and bring a backup method.
+**What payment methods does Sabino accept at the shop?** Cash payment at the counter is supported for website orders. GCash, Maya, QR, and card payment should not be promised until Sabino’s verified PayMongo merchant checkout is activated or staff confirms another method.
 
 **How long will my order take?** Preparation time depends on queue size, item availability, and order size. Ask staff for the current estimate after they scan and accept the QR.
 
