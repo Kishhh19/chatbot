@@ -24,7 +24,7 @@ foreach ($shop['menu'] as $item) { $menuGroups[$item['kind']][$item['category']]
 <header class="site-header" id="top"><div class="nav-wrap">
   <a class="wordmark" href="#top" aria-label="Sabino home"><span class="cactus-mark" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M32 53V17c0-4 2-7 5-7s5 3 5 7v12c0 3 2 5 5 5s5-2 5-5v-5M32 41H21c-5 0-9-4-9-9v-8c0-3 2-5 5-5s5 2 5 5v5"/></svg></span><span><strong>SABINO</strong><small>ANGELES CITY</small></span></a>
   <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
-  <nav class="site-nav" aria-label="Main navigation"><a href="#story">Our place</a><a href="#menu">Menu</a><a href="#visit">Visit</a><button class="nav-chat" type="button" data-chat-open>Ask Sabinox <span>↗</span></button></nav>
+  <nav class="site-nav" aria-label="Main navigation"><a href="#story">Our place</a><a href="#menu">Menu</a><a href="#order">Order</a><a href="#visit">Visit</a><button class="nav-chat" type="button" data-chat-open>Ask Sabinox <span>↗</span></button></nav>
 </div></header>
 
 <main id="main-content">
@@ -49,11 +49,20 @@ foreach ($shop['menu'] as $item) { $menuGroups[$item['kind']][$item['category']]
   <div class="menu-heading"><div><p class="kicker light"><span></span> SABINO’S CURRENT MENU</p><h2>Pick your<br><em>kind of comfort.</em></h2></div><div class="menu-note"><strong>Drinks, meals & good company</strong><p>Browse the prices from Sabino’s in-shop menu. Availability may change during the day, so ask the team about sold-out items and specials.</p></div></div>
   <div class="menu-switcher" role="group" aria-label="Choose menu section"><button class="active" type="button" data-menu-filter="Drinks">Drinks <span><?= count(array_filter($shop['menu'], fn($item) => $item['kind'] === 'Drinks')) ?></span></button><button type="button" data-menu-filter="Food">Food <span><?= count(array_filter($shop['menu'], fn($item) => $item['kind'] === 'Food')) ?></span></button></div>
   <div class="menu-catalog"><?php foreach ($menuGroups as $kind => $categories): ?><section class="menu-kind<?= $kind === 'Drinks' ? ' active' : '' ?>" data-menu-kind="<?= e($kind) ?>" aria-label="<?= e($kind) ?> menu"><div class="menu-kind-title"><span><?= e($kind) ?></span><p><?= $kind === 'Drinks' ? 'Coffee, soda, specialty & tea' : 'From starters to full meals' ?></p></div><div class="menu-category-grid"><?php $categoryIndex = 0; foreach ($categories as $category => $items): $categoryIndex++; ?><article class="menu-category"><header><h3><?= e($category) ?></h3><span><?= str_pad((string)$categoryIndex, 2, '0', STR_PAD_LEFT) ?></span></header><div><?php foreach ($items as $item): ?><div class="menu-row"><span><?= e($item['name']) ?></span><strong><?php if (isset($item['sharing_price'])): ?><small>Solo</small> ₱<?= (int)$item['price'] ?> <small>Sharing</small> ₱<?= (int)$item['sharing_price'] ?><?php else: ?>₱<?= (int)$item['price'] ?><?php endif; ?></strong></div><?php endforeach; ?></div></article><?php endforeach; ?></div></section><?php endforeach; ?></div>
-  <div class="menu-footer"><p>Not sure what suits you?</p><button type="button" data-chat-open data-question="Recommend a drink based on my taste">Let Sabinox pick your drink <span>↗</span></button></div>
+  <div class="menu-footer"><p>Ready to choose?</p><a class="order-menu-link" href="#order">Build an order <span>↗</span></a><button type="button" data-chat-open data-question="Recommend a drink based on my taste">Let Sabinox pick your drink <span>↗</span></button></div>
+</section>
+
+<section class="order-section section" id="order">
+  <div class="section-label"><span>03</span><p>ORDER & REVIEW</p></div>
+  <div class="order-heading"><div><p class="kicker dark"><span></span> YOUR ORDER, YOUR CHECK</p><h2>Pick it.<br><em>Check it. Confirm it.</em></h2></div><p>Choose from Sabino’s current menu, review every item and price, then create a secure QR for staff to scan. An order starts only after the team accepts it.</p></div>
+  <div class="order-builder">
+    <div class="order-browser"><div class="order-tools"><div class="order-tabs" role="group" aria-label="Order categories"><button class="active" type="button" data-order-kind="Drinks">Drinks</button><button type="button" data-order-kind="Food">Food</button></div><label><span class="sr-only">Search menu</span><input id="order-search" type="search" placeholder="Search the menu…"></label></div><div id="order-items" class="order-items" aria-live="polite"></div></div>
+    <aside class="cart-card" aria-labelledby="cart-title"><div><p>YOUR SELECTION</p><span id="cart-count">0 items</span></div><h3 id="cart-title">Order review</h3><div id="cart-lines" class="cart-lines"><p class="empty-cart">Your order is waiting for something good.</p></div><div class="cart-total"><span>Total</span><strong id="cart-total">₱0</strong></div><label>Your name <input id="order-customer" maxlength="60" placeholder="Guest name"></label><label>Table / pickup note <input id="order-reference" maxlength="40" placeholder="Optional"></label><button id="review-order" type="button" disabled>Review order <span>↗</span></button><small>Submitting creates a request for staff verification. It does not automatically start preparation.</small></aside>
+  </div>
 </section>
 
 <section class="visit section" id="visit">
-  <div class="section-label"><span>03</span><p>COME SAY HI</p></div><div class="visit-intro"><p class="kicker dark"><span></span> YOUR NEXT COFFEE BREAK</p><h2>Find the cactus.<br><em>Stay for the coffee.</em></h2></div>
+  <div class="section-label"><span>04</span><p>COME SAY HI</p></div><div class="visit-intro"><p class="kicker dark"><span></span> YOUR NEXT COFFEE BREAK</p><h2>Find the cactus.<br><em>Stay for the coffee.</em></h2></div>
   <div class="visit-grid"><article class="visit-card address-card"><span class="card-number">01</span><p>FIND US</p><h3><?= e($shop['address']) ?></h3><a href="<?= e($shop['maps']) ?>" target="_blank" rel="noopener noreferrer">Open in Google Maps <span>↗</span></a></article><article class="visit-card hours-card"><span class="card-number">02</span><p>OPENING HOURS</p><div class="hours-list"><?php foreach ($shop['hours_short'] as $hours): ?><div><span><?= e($hours['days']) ?></span><strong><?= e($hours['time']) ?></strong></div><?php endforeach; ?></div><small>Please confirm holiday and special-event hours.</small></article><article class="visit-card contact-card"><span class="card-number">03</span><p>CONTACT</p><h3><?= e($shop['phone']) ?></h3><div><a href="<?= e($shop['phone_link']) ?>">Call or text <span>↗</span></a><a href="<?= e($shop['instagram']) ?>" target="_blank" rel="noopener noreferrer">Instagram <span>↗</span></a></div></article></div>
 </section>
 
@@ -69,7 +78,10 @@ foreach ($shop['menu'] as $item) { $menuGroups[$item['kind']][$item['category']]
   <div class="composer-wrap"><form id="chat-form" class="composer"><label class="sr-only" for="message-input">Message Sabinox</label><textarea id="message-input" rows="1" maxlength="1000" placeholder="Ask Sabinox about Sabino..."></textarea><button id="send-button" type="submit" aria-label="Send message"><svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button></form><p>Menu prices are current from Sabino’s board. <a href="<?= e($shop['phone_link']) ?>">Check availability.</a></p></div>
 </section><div class="chat-backdrop" id="chat-backdrop"></div>
 
-<?php if ($staticBuild): ?><script>window.SABINO_DATA = <?= json_encode($shop, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script><?php endif; ?>
-<script src="assets/js/sabino.js" defer></script>
-</body></html>
+<dialog class="order-dialog" id="order-dialog" aria-labelledby="order-dialog-title"><button class="dialog-close" id="order-dialog-close" type="button" aria-label="Close order">×</button><div id="order-dialog-content"></div></dialog>
 
+<?php if ($staticBuild): ?><script>window.SABINO_DATA = <?= json_encode($shop, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;</script><?php endif; ?>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js" defer></script>
+<script src="assets/js/sabino.js" defer></script>
+<script src="assets/js/order.js" defer></script>
+</body></html>

@@ -1,0 +1,14 @@
+export const catalog = [
+  ['Americano',130,'Drinks','Coffee'],['Latte',150,'Drinks','Coffee'],['Spanish Latte',160,'Drinks','Coffee'],['Caramel Macchiato',190,'Drinks','Coffee'],['Sea Salt Latte',190,'Drinks','Coffee'],['Tiramisu Latte',200,'Drinks','Coffee'],
+  ['Lychee',150,'Drinks','Italian Soda'],['Strawberry',150,'Drinks','Italian Soda'],['Kiwi',150,'Drinks','Italian Soda'],['Green Apple',150,'Drinks','Italian Soda'],['Blueberry',150,'Drinks','Italian Soda'],['Grapes',150,'Drinks','Italian Soda'],['Peach',150,'Drinks','Italian Soda'],['Passion Fruit',150,'Drinks','Italian Soda'],
+  ['Coke Float',150,'Drinks','Specialty'],['Apollo',180,'Drinks','Specialty'],['Dark Chocolate',190,'Drinks','Specialty'],['Matcha Latte',190,'Drinks','Specialty'],['Georgia',190,'Drinks','Specialty'],['Dirty Matcha',200,'Drinks','Specialty'],['Ube',200,'Drinks','Specialty'],['Pistachio Latte',250,'Drinks','Specialty'],
+  ['Lychee Mango',150,'Drinks','Tea'],['Peach Mango',150,'Drinks','Tea'],['Strawberry Lemon',150,'Drinks','Tea'],['Strawberry Peach',150,'Drinks','Tea'],['Kiwi',150,'Drinks','Tea'],
+  ['Mi Goreng',150,'Food','Starters'],['Onion Rings',200,'Food','Starters'],['Animal Style Fries',250,'Food','Starters'],['Nachos',270,'Food','Starters'],['Caesar Salad',250,'Food','Salad'],['Mushroom',150,'Food','Soup'],['Crab and Corn',150,'Food','Soup'],
+  ['Spam',190,'Food','Rice Meals'],['Tocino',200,'Food','Rice Meals'],['Bacon',220,'Food','Rice Meals'],['Tapa',230,'Food','Rice Meals'],['Burger Steak',230,'Food','Rice Meals'],['Fried Chicken',230,'Food','Rice Meals'],['Breaded Porkchop',230,'Food','Rice Meals'],
+  ['Carbonara',270,'Food','Pasta'],['Aglio Olio',300,'Food','Pasta'],['Chicken Pesto',300,'Food','Pasta'],['Spaghetti & Meatballs',300,'Food','Pasta'],
+  ['PB & J',150,'Food','Special Sandwiches'],['Tuna',170,'Food','Special Sandwiches'],['Cheeseburger',220,'Food','Special Sandwiches'],['B.E.L.T.',250,'Food','Special Sandwiches'],['Crispy Chicken Burger',250,'Food','Special Sandwiches'],['Buffalo Chicken Burger',290,'Food','Special Sandwiches'],['BBQ Jalapeño Burger',300,'Food','Special Sandwiches'],
+  ['Rice',25,'Food','Add-ons'],['Egg',25,'Food','Add-ons'],['Garlic Mayo',30,'Food','Add-ons'],['Gravy',30,'Food','Add-ons'],['Garlic Bread',40,'Food','Add-ons'],['Ranch',50,'Food','Add-ons'],['Roasted Sesame',60,'Food','Add-ons'],
+  ['Buffalo',240,'Food','Wings'],['Buffalo (Sharing)',550,'Food','Wings'],['Honey Sriracha',240,'Food','Wings'],['Honey Sriracha (Sharing)',550,'Food','Wings'],['Soy Garlic',240,'Food','Wings'],['Soy Garlic (Sharing)',550,'Food','Wings'],['Garlic Parmesan',240,'Food','Wings'],['Garlic Parmesan (Sharing)',550,'Food','Wings']
+].map(([name, price, kind, category]) => ({ id: `${kind}|${category}|${name}`, name, price, kind, category }));
+
+export const catalogById = new Map(catalog.map(item => [item.id, item]));

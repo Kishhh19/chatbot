@@ -7,6 +7,9 @@ function sabino_data(): array {
         'address' => '693 D. Fajardo Street, Salapungan, Angeles City, Pampanga',
         'phone' => '+63 916 653 9270',
         'phone_link' => 'tel:+639166539270',
+        'wifi_available' => true,
+        'wifi_name' => 'Sabino Café Wi-Fi',
+        'wifi_password' => 'sabinocafe123',
         'instagram' => 'https://www.instagram.com/sabinowhoknows/',
         'maps' => 'https://www.google.com/maps/search/?api=1&query=693+D.+Fajardo+Street%2C+Salapungan%2C+Angeles+City%2C+Pampanga',
         'hours' => 'Monday–Friday, 9:00 AM–10:00 PM; Saturday, 1:00 PM–9:00 PM; Sunday closed. Please contact Sabino to confirm holiday or special-event hours.',
@@ -143,8 +146,11 @@ function sabino_reply(string $question): array {
     } elseif (preg_match('/\b(payment|pay|gcash|maya|card|cash|credit|debit)\b/u', $q)) {
         $reply = "Sabino’s accepted payment methods haven’t been confirmed. It’s best to bring a backup payment method and [ask the shop]({$data['phone_link']}) whether they currently accept cash, GCash/Maya, or cards.";
         $suggestions = ['Contact Sabino', 'Full menu', 'Find Sabino'];
-    } elseif (preg_match('/\b(wifi|wi.fi|parking|pets?|pet.friendly|outlet|socket|work|study|laptop|restroom|toilet|accessib)\b/u', $q)) {
-        $reply = "I don’t have verified details yet about Sabino’s Wi-Fi, parking, outlets, pet policy, restrooms, accessibility, or laptop rules. Please [call or text the shop]({$data['phone_link']}) before visiting if one of these is essential. Tell me which amenity you need and I’ll help you form the right question.";
+    } elseif (preg_match('/\b(wifi|wi.fi|internet|password)\b/u', $q)) {
+        $reply = "Yes, **Sabino has Wi-Fi**. The current password is **{$data['wifi_password']}**. Ask the staff if the network name or password has recently changed.";
+        $suggestions = ['Opening hours', 'Show drinks menu', 'Order for pickup'];
+    } elseif (preg_match('/\b(parking|pets?|pet.friendly|outlet|socket|work|study|laptop|restroom|toilet|accessib)\b/u', $q)) {
+        $reply = "I don’t have verified details yet about Sabino’s parking, outlets, pet policy, restrooms, accessibility, or laptop rules. Please [call or text the shop]({$data['phone_link']}) before visiting if one of these is essential.";
         $suggestions = ['Contact Sabino', 'Find Sabino', 'Opening hours'];
     } elseif (preg_match('/\b(strong(?:er|est)? coffee.*caffeine|caffeine.*strong(?:er|est)? coffee|dark roast.*caffeine|caffeine.*dark roast)\b/u', $q)) {
         $reply = "**Strong flavor and high caffeine are not the same thing.** Dark roast can taste bolder, but caffeine depends more on the bean, dose, number of espresso shots, and serving size. For more caffeine, ask about an extra shot; for a bold taste from Sabino’s menu, start with the **Americano (₱130)**.";
@@ -296,4 +302,3 @@ function sabino_reply(string $question): array {
     }
     return ['content' => $reply, 'suggestions' => $suggestions, 'matched' => $matched];
 }
-

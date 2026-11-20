@@ -157,7 +157,10 @@ function answer(question) {
   } else if (/\b(payment|pay|gcash|maya|card|cash|credit|debit)\b/u.test(q)) {
     content = `Sabino’s accepted payment methods aren’t listed on the menu board. Please [ask the shop](${shop.phone_link}) whether they currently accept cash, GCash/Maya, or cards.`;
     suggestions = ['Contact Sabino', 'Full menu', 'Find Sabino'];
-  } else if (/\b(wifi|wi.fi|parking|pets?|pet.friendly|outlet|socket|work|study|laptop|restroom|toilet|accessib)\b/u.test(q)) {
+  } else if (/\b(wifi|wi.fi|internet|password)\b/u.test(q)) {
+    content = `Yes, **Sabino has Wi-Fi**. The current password is **${shop.wifi_password}**. Ask the staff if the network name or password has recently changed.`;
+    suggestions = ['Opening hours', 'Show drinks menu', 'Order online'];
+  } else if (/\b(parking|pets?|pet.friendly|outlet|socket|work|study|laptop|restroom|toilet|accessib)\b/u.test(q)) {
     content = `I don’t have verified details about Sabino’s amenities. Please [call or text the shop](${shop.phone_link}) before visiting if one is essential.`;
     suggestions = ['Contact Sabino', 'Find Sabino', 'Opening hours'];
   } else if (guide) {
@@ -270,7 +273,20 @@ async function sendMessage(override) {
   appendMessage('user', question);
   const typing = appendMessage('assistant', 'Thinking…', true);
   try {
-    const data = answer(question);
+    let data;
+    try {
+      const response = await fetch('/api/dify-chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({question}),
+        signal: AbortSignal.timeout(11000)
+      });
+      if (!response.ok) throw new Error('Dify fallback');
+      data = await response.json();
+      data.suggestions = answer(question).suggestions;
+    } catch {
+      data = answer(question);
+    }
     typing.remove();
     appendMessage('assistant', data.content);
     renderFollowups(data.suggestions || []);
@@ -315,4 +331,3 @@ document.getElementById('new-chat').addEventListener('click', () => {
   input.focus();
 });
 if (!touched) readHistory().forEach(message => appendMessage(message.role, message.content));
-

@@ -1,0 +1,8 @@
+{
+  "name": "sabino-cafe-site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}

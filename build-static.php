@@ -19,7 +19,8 @@ foreach ([$output, "$output/assets", "$output/assets/css", "$output/assets/js"] 
 
 if (file_put_contents("$output/index.html", $html) === false
     || !copy(__DIR__ . '/assets/css/sabino.css', "$output/assets/css/sabino.css")
-    || !copy(__DIR__ . '/assets/js/sabino-static.js', "$output/assets/js/sabino.js")) {
+    || !copy(__DIR__ . '/assets/js/sabino-static.js', "$output/assets/js/sabino.js")
+    || !copy(__DIR__ . '/assets/js/order.js', "$output/assets/js/order.js")) {
     throw new RuntimeException('Could not write the static site.');
 }
 echo "Built public/index.html and assets.\n";
