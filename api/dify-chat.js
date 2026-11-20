@@ -11,7 +11,14 @@ function cleanRetrievedText(value) {
   return String(value || '')
     .replace(/^#+\s+.*$/gm, '')
     .replace(/^Each entry.*$/gim, '')
+    .replace(/:\*\*/g, ':')
     .trim();
+}
+
+function isHeadingOnly(value) {
+  const text = String(value || '').trim();
+  if (/^Question:/i.test(text)) return true;
+  return text.length < 90 && !/[.!?]$/.test(text) && !/\bPHP\s*\d+/i.test(text);
 }
 
 export default async function handler(req, res) {
@@ -45,12 +52,23 @@ export default async function handler(req, res) {
     if (!response.ok) throw new Error(`Dify returned ${response.status}`);
     const data = await response.json();
     const records = Array.isArray(data.records) ? data.records : [];
-    const best = records
+    const matches = records
       .map(record => ({ content: cleanRetrievedText(record.segment?.content), score: Number(record.score || 0) }))
-      .filter(record => record.content.length > 20)
-      .sort((a, b) => b.score - a.score)[0];
+      .filter(record => record.content.length > 20 && !isHeadingOnly(record.content))
+      .sort((a, b) => b.score - a.score);
+    const best = matches[0];
     if (!best) return json(res, 404, { error: 'No matching Dify knowledge was found.' });
-    return json(res, 200, { content: best.content, source: 'dify', confidence: best.score });
+
+    // Dify may split a question heading from its answer. Prefer answer-like
+    // segments and combine closely ranked matches for multi-part questions.
+    const selected = matches
+      .filter(record => record.score >= Math.max(0.25, best.score - 0.12))
+      .slice(0, 2);
+    return json(res, 200, {
+      content: selected.map(record => record.content).join('\n\n'),
+      source: 'dify',
+      confidence: best.score
+    });
   } catch (error) {
     return json(res, 502, { error: 'Dify is temporarily unavailable.' });
   }
