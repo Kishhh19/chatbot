@@ -110,8 +110,8 @@ function orderIntentAnswer(question) {
   return {
     content: `I found **${units} item${units === 1 ? '' : 's'}** for your order:\n\n${lines}\n\n**Estimated total: ₱${total}**\n\nI have not submitted it yet. Add these items to the Order Review, check every quantity, then confirm to create the secure staff QR.`,
     suggestions: [
-      {label:`Add ${units} item${units === 1 ? '' : 's'} to order`, action:'add-order', items},
-      'How does QR payment work?',
+      {label:'Confirm & create counter QR', action:'create-order-qr', items},
+      {label:'Edit in order review', action:'add-order', items},
       'Can I pay cash?'
     ]
   };
@@ -214,6 +214,9 @@ function answer(question) {
   } else if (/\b(reserve|reservation|book|table|event|group|function)\b/u.test(q)) {
     content = `For tables, groups, or events, please [contact Sabino](${shop.phone_link}) first. I don’t have a confirmed reservation policy.`;
     suggestions = ['Contact Sabino', 'Opening hours', 'Find Sabino'];
+  } else if (/\b(order qr|qr order|counter qr|staff qr|how.*qr.*work|what.*qr.*for)\b/u.test(q)) {
+    content = `The **order QR** is a signed summary of the customer’s confirmed items, quantities, total, order number, and payment status. After you confirm an order, Sabinox can display the QR inside the chat. Show it to the counter so staff can scan and verify the order. It is **not a payment QR**, and preparation starts only after staff accepts it.`;
+    suggestions = ['Order an Americano and Carbonara', 'How does QR payment work?', 'Can I pay cash?'];
   } else if (/\b(qr payment|payment qr|scan.*pay|pay.*qr|cash|payment|pay|gcash|maya|card|credit|debit)\b/u.test(q)) {
     if (/\b(qr payment|payment qr|scan.*pay|pay.*qr|gcash|maya)\b/u.test(q)) {
       content = `The website currently creates a **secure order QR for staff verification**, not a GCash/Maya payment QR. Online QR payment will appear only after Sabino’s verified PayMongo merchant account is activated. For now, complete the order review, show the QR to staff, and **pay cash at the shop**.`;
@@ -313,6 +316,48 @@ function appendMessage(role, content, temporary = false) {
   scrollPane.scrollTop = scrollPane.scrollHeight;
   return article;
 }
+function appendCounterQr(data) {
+  intro.classList.add('hidden');
+  const article = document.createElement('article');
+  article.className = 'message assistant';
+  const qrId = `chat-order-qr-${Date.now()}`;
+  const scanUrl = `${location.origin}/?view-order#order=${encodeURIComponent(data.token)}`;
+  const lines = data.order.items.map(item => `<div><span>${item.quantity} × ${escapeHtml(item.name)}</span><strong>₱${item.subtotal}</strong></div>`).join('');
+  article.innerHTML = `<div class="msg-avatar" aria-hidden="true">S</div><div class="msg-body"><div class="msg-name">Sabinox</div><div class="msg-bubble chat-order-card"><strong>Counter order QR ready</strong><p class="chat-order-number">${escapeHtml(data.order.orderId)}</p><div class="chat-order-lines">${lines}</div><div class="chat-order-total"><span>Total</span><strong>₱${data.order.total}</strong></div><div id="${qrId}" class="chat-order-qr" aria-label="Scannable order QR code"></div><p>Show this signed QR to the counter. Staff can verify the order before preparation. <strong>This is an order QR, not a payment QR.</strong> Pay cash at the shop.</p><button type="button" class="chat-copy-order">Copy order link</button></div></div>`;
+  messages.appendChild(article);
+  const qrHost = article.querySelector(`#${qrId}`);
+  if (window.QRCode) new QRCode(qrHost, {text:scanUrl, width:190, height:190, colorDark:'#142d22', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M});
+  else qrHost.innerHTML = `<a href="${scanUrl}">Open verified order</a>`;
+  article.querySelector('.chat-copy-order')?.addEventListener('click', async event => {
+    await navigator.clipboard.writeText(scanUrl);
+    event.currentTarget.textContent = 'Order link copied';
+  });
+  scrollPane.scrollTop = scrollPane.scrollHeight;
+}
+async function createCounterQr(items) {
+  if (busy || !Array.isArray(items) || !items.length) return;
+  setBusy(true);
+  followups.replaceChildren();
+  const typing = appendMessage('assistant', 'Creating your secure counter QR…', true);
+  try {
+    const response = await fetch('/api/create-checkout', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({customer:'Chat guest', reference:'Sabinox chat order', items:items.map(item => ({id:item.id, quantity:item.quantity}))})
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || 'Unable to create the counter QR.');
+    typing.remove();
+    appendCounterQr(data);
+    writeHistory([...readHistory(), {role:'assistant', content:`Counter QR created for ${data.order.orderId}. Show it to staff for verification.`}]);
+  } catch (error) {
+    typing.remove();
+    appendMessage('assistant', `I couldn’t create the counter QR: **${error.message || 'Please try again.'}**`);
+  } finally {
+    setBusy(false);
+    input.focus();
+  }
+}
 function renderFollowups(items) {
   followups.replaceChildren();
   items.forEach(item => {
@@ -321,7 +366,9 @@ function renderFollowups(items) {
     button.type = 'button';
     button.textContent = option.label + ' ↗';
     button.addEventListener('click', () => {
-      if (option.action === 'add-order') {
+      if (option.action === 'create-order-qr') {
+        createCounterQr(option.items || []);
+      } else if (option.action === 'add-order') {
         window.dispatchEvent(new CustomEvent('sabino:add-order-items', {detail:{items:option.items || []}}));
         closeChat();
         document.getElementById('order')?.scrollIntoView({behavior:'smooth', block:'start'});
@@ -348,7 +395,7 @@ async function sendMessage(override) {
   try {
     let data;
     const orderData = orderIntentAnswer(question);
-    const checkoutQuestion = /\b(qr payment|payment qr|scan.*pay|pay.*qr|cash|payment|pay|gcash|maya|card|credit|debit|order qr|how.*order|order.*work)\b/iu.test(question);
+    const checkoutQuestion = /\b(qr payment|payment qr|scan.*pay|pay.*qr|cash|payment|pay|gcash|maya|card|credit|debit|order qr|qr order|counter qr|how.*order|order.*work|how.*qr.*work)\b/iu.test(question);
     if (orderData) data = orderData;
     else if (checkoutQuestion) data = answer(question);
     else try {
