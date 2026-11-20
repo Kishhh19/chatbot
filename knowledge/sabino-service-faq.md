@@ -8,6 +8,8 @@ Last reviewed: November 2026. Use these answers for Sabino-specific customer que
 
 **Can staff see my order from the QR code?** Yes. The QR code opens a signed Sabino order summary containing the order number, customer name or reference, chosen items, quantities, total, creation time, and payment status. A changed or fake code will fail verification.
 
+**How does the order QR work? What is the counter QR?** After Sabinox summarizes a customer’s items, the customer can select Confirm and Create Counter QR. Sabinox creates a signed QR inside the chat containing the exact items, quantities, total, order number, creation time, and payment status. Show it to the counter so staff can scan and verify it. It is an order QR, not a GCash, Maya, bank, or card payment QR. Preparation begins only after staff accepts the order.
+
 **Can I pay online or in advance? Can I use QR payment, GCash, or Maya?** The website currently creates a secure order QR for staff verification; it is not a GCash, Maya, or bank payment QR. Online QR payment becomes available only after Sabino’s verified PayMongo merchant account is activated. Until then, confirm the order, show the order QR to staff, and pay cash at the shop.
 
 **Can I pay cash? How does cash payment work?** Yes. Build and confirm the order on the website, show the secure order QR to staff, and pay cash at the counter after staff verifies the items and total. The order QR does not mean the order is already paid.
