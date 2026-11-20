@@ -57,6 +57,66 @@ function menuText(kind = null) {
   });
   return sections.join('\n\n') + `\n\nAvailability can change. [Call or text Sabino](${shop.phone_link}) for today’s items.`;
 }
+
+const quantityWords = {a:1, an:1, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9, ten:10};
+const normalizeMatch = value => String(value || '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').trim();
+const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\function coffeeGuide(q) {');
+
+function quantityForItem(query, itemName) {
+  const name = escapeRegExp(normalizeMatch(itemName));
+  const before = query.match(new RegExp(`(?:^|\\b)(\\d{1,2}|a|an|one|two|three|four|five|six|seven|eight|nine|ten)\\s*(?:x|pcs?|pieces?|orders?\\s+of)?\\s+${name}(?:s)?\\b`, 'i'));
+  const after = query.match(new RegExp(`\\b${name}(?:s)?\\s*(?:x|times)?\\s*(\\d{1,2})\\b`, 'i'));
+  const raw = before?.[1]?.toLowerCase() || after?.[1];
+  return Math.max(1, Math.min(20, Number(raw) || quantityWords[raw] || 1));
+}
+
+function parseMenuItems(question) {
+  const query = normalizeMatch(question);
+  const results = [];
+  const seenNames = new Set();
+  const matchedRanges = [];
+  const menu = [...shop.menu].sort((a, b) => b.name.length - a.name.length);
+  menu.forEach(item => {
+    const normalizedName = normalizeMatch(item.name);
+    if (!normalizedName || seenNames.has(normalizedName)) return;
+    const pattern = new RegExp(`(?:^|\\b)${escapeRegExp(normalizedName)}(?:s)?(?:\\b|$)`, 'i');
+    const match = pattern.exec(query);
+    if (!match) return;
+    const position = query.indexOf(normalizedName, match.index);
+    const end = position + normalizedName.length;
+    if (matchedRanges.some(range => position < range.end && end > range.start)) return;
+    seenNames.add(normalizedName);
+    matchedRanges.push({start:position, end});
+    const sharing = Boolean(item.sharing_price && /\b(sharing|group|large)\b/u.test(query));
+    results.push({
+      id: `${item.kind}|${item.category}|${item.name}${sharing ? ' (Sharing)' : ''}`,
+      name: `${item.name}${sharing ? ' (Sharing)' : ''}`,
+      price: sharing ? item.sharing_price : item.price,
+      quantity: quantityForItem(query, normalizedName),
+      position
+    });
+  });
+  return results.sort((a, b) => a.position - b.position).map(({position, ...item}) => item);
+}
+
+function orderIntentAnswer(question) {
+  const q = normalizeMatch(question);
+  const items = parseMenuItems(question);
+  const orderingWords = /\b(order|buy|want|would like|i ll have|i will have|give me|get me|add|take|kuha|bili|pabili)\b/u.test(q);
+  if (!items.length || (!orderingWords && items.length < 2)) return null;
+  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const units = items.reduce((sum, item) => sum + item.quantity, 0);
+  const lines = items.map(item => `- **${item.quantity} × ${item.name}** — ₱${item.price * item.quantity}`).join('\n');
+  return {
+    content: `I found **${units} item${units === 1 ? '' : 's'}** for your order:\n\n${lines}\n\n**Estimated total: ₱${total}**\n\nI have not submitted it yet. Add these items to the Order Review, check every quantity, then confirm to create the secure staff QR.`,
+    suggestions: [
+      {label:`Add ${units} item${units === 1 ? '' : 's'} to order`, action:'add-order', items},
+      'How does QR payment work?',
+      'Can I pay cash?'
+    ]
+  };
+}
+
 function coffeeGuide(q) {
   let content = '';
   let suggestions = ['Coffee basics', 'Recommend a drink', 'Show drinks menu'];
@@ -154,9 +214,15 @@ function answer(question) {
   } else if (/\b(reserve|reservation|book|table|event|group|function)\b/u.test(q)) {
     content = `For tables, groups, or events, please [contact Sabino](${shop.phone_link}) first. I don’t have a confirmed reservation policy.`;
     suggestions = ['Contact Sabino', 'Opening hours', 'Find Sabino'];
-  } else if (/\b(payment|pay|gcash|maya|card|cash|credit|debit)\b/u.test(q)) {
-    content = `Sabino’s accepted payment methods aren’t listed on the menu board. Please [ask the shop](${shop.phone_link}) whether they currently accept cash, GCash/Maya, or cards.`;
-    suggestions = ['Contact Sabino', 'Full menu', 'Find Sabino'];
+  } else if (/\b(qr payment|payment qr|scan.*pay|pay.*qr|cash|payment|pay|gcash|maya|card|credit|debit)\b/u.test(q)) {
+    if (/\b(qr payment|payment qr|scan.*pay|pay.*qr|gcash|maya)\b/u.test(q)) {
+      content = `The website currently creates a **secure order QR for staff verification**, not a GCash/Maya payment QR. Online QR payment will appear only after Sabino’s verified PayMongo merchant account is activated. For now, complete the order review, show the QR to staff, and **pay cash at the shop**.`;
+    } else if (/\bcash\b/u.test(q)) {
+      content = `Yes, you can choose **cash payment at the shop**. Build and confirm your order first, show the secure order QR to staff, and pay at the counter after staff verifies the items and total.`;
+    } else {
+      content = `For now, the website supports **cash payment at the shop** after staff verifies the secure order QR. The QR contains the order details; it is not a payment QR. Hosted online payment will become available only after Sabino’s verified merchant account is connected.`;
+    }
+    suggestions = ['Build a food and drink order', 'How does the order QR work?', 'Show full menu'];
   } else if (/\b(wifi|wi.fi|internet|password)\b/u.test(q)) {
     content = `Yes, **Sabino has Wi-Fi**. The current password is **${shop.wifi_password}**. Ask the staff if the network name or password has recently changed.`;
     suggestions = ['Opening hours', 'Show drinks menu', 'Order online'];
@@ -250,10 +316,17 @@ function appendMessage(role, content, temporary = false) {
 function renderFollowups(items) {
   followups.replaceChildren();
   items.forEach(item => {
+    const option = typeof item === 'string' ? {label:item, question:item} : item;
     const button = document.createElement('button');
     button.type = 'button';
-    button.textContent = item + ' ↗';
-    button.addEventListener('click', () => sendMessage(item));
+    button.textContent = option.label + ' ↗';
+    button.addEventListener('click', () => {
+      if (option.action === 'add-order') {
+        window.dispatchEvent(new CustomEvent('sabino:add-order-items', {detail:{items:option.items || []}}));
+        closeChat();
+        document.getElementById('order')?.scrollIntoView({behavior:'smooth', block:'start'});
+      } else sendMessage(option.question || option.label);
+    });
     followups.appendChild(button);
   });
 }
@@ -274,7 +347,11 @@ async function sendMessage(override) {
   const typing = appendMessage('assistant', 'Thinking…', true);
   try {
     let data;
-    try {
+    const orderData = orderIntentAnswer(question);
+    const checkoutQuestion = /\b(qr payment|payment qr|scan.*pay|pay.*qr|cash|payment|pay|gcash|maya|card|credit|debit|order qr|how.*order|order.*work)\b/iu.test(question);
+    if (orderData) data = orderData;
+    else if (checkoutQuestion) data = answer(question);
+    else try {
       const response = await fetch('/api/dify-chat', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
