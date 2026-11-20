@@ -40,6 +40,18 @@
     cartHost.innerHTML = rows.length ? rows.map(row => `<div class="cart-line"><span><strong>${escape(row.name)}</strong><small>${money(row.price)} each</small></span><span class="quantity"><button type="button" data-cart-change="${escape(row.id)}" data-delta="-1" aria-label="Remove one">−</button><b>${row.quantity}</b><button type="button" data-cart-change="${escape(row.id)}" data-delta="1" aria-label="Add one">+</button></span><strong>${money(row.price * row.quantity)}</strong></div>`).join('') : '<p class="empty-cart">Your order is waiting for something good.</p>';
   }
 
+
+  function addRequestedItems(items) {
+    (Array.isArray(items) ? items : []).forEach(requested => {
+      const item = catalog.find(row => row.id === requested.id);
+      if (!item) return;
+      const current = cart.get(item.id);
+      const quantity = Math.max(1, Math.min(20, Number.parseInt(requested.quantity, 10) || 1));
+      cart.set(item.id, {...item, quantity: Math.min(20, (current?.quantity || 0) + quantity)});
+    });
+    renderCart();
+  }
+
   function reviewHtml() {
     return `<div class="dialog-kicker">PLEASE CHECK BEFORE CONFIRMING</div><h2 id="order-dialog-title">Is everything correct?</h2><p class="dialog-lede">Check each item and quantity. Once confirmed, this exact order is placed in a secure QR for Sabino staff.</p><div class="dialog-order-lines">${selected().map(row => `<div><span>${row.quantity} × ${escape(row.name)}</span><strong>${money(row.quantity * row.price)}</strong></div>`).join('')}</div><div class="dialog-total"><span>Total</span><strong>${money(total())}</strong></div><div class="dialog-actions"><button class="secondary" type="button" data-edit-order>Go back & edit</button><button class="primary" type="button" data-confirm-order>Confirm correct order</button></div>`;
   }
@@ -81,6 +93,7 @@
   cartHost.addEventListener('click', event => { const button = event.target.closest('[data-cart-change]'); if (!button) return; const row = cart.get(button.dataset.cartChange); if (!row) return; row.quantity += Number(button.dataset.delta); if (row.quantity < 1) cart.delete(row.id); renderCart(); });
   document.querySelectorAll('[data-order-kind]').forEach(button => button.addEventListener('click', () => { activeKind = button.dataset.orderKind; document.querySelectorAll('[data-order-kind]').forEach(tab => tab.classList.toggle('active', tab === button)); renderMenu(); }));
   searchInput.addEventListener('input', renderMenu);
+  window.addEventListener('sabino:add-order-items', event => addRequestedItems(event.detail?.items));
   reviewButton.addEventListener('click', () => { dialogContent.innerHTML = reviewHtml(); dialog.showModal(); });
   dialog.addEventListener('click', event => { if (event.target.hasAttribute('data-edit-order')) dialog.close(); const button = event.target.closest('[data-confirm-order]'); if (button) confirmOrder(button); });
   document.getElementById('order-dialog-close').addEventListener('click', () => dialog.close());
