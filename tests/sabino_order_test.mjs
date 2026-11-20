@@ -28,7 +28,7 @@ for (const [question, expected, total] of cases) {
     throw new Error(`${question}\nExpected ${JSON.stringify(expected)}\nReceived ${JSON.stringify(actual)}`);
   }
   const reply = orderIntentAnswer(question);
-  if (!reply?.content.includes(`Estimated total: ₱${total}`) || reply.suggestions?.[0]?.items?.length !== expected.length) {
+  if (!reply?.content.includes(`Estimated total: ₱${total}`) || reply.suggestions?.[0]?.action !== 'create-order-qr' || reply.suggestions?.[0]?.items?.length !== expected.length) {
     throw new Error(`Order summary failed for: ${question}`);
   }
 }
