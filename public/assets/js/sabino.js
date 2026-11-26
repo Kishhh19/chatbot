@@ -60,7 +60,27 @@ function menuText(kind = null) {
 
 const quantityWords = {a:1, an:1, one:1, two:2, three:3, four:4, five:5, six:6, seven:7, eight:8, nine:9, ten:10};
 const normalizeMatch = value => String(value || '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, ' ').trim();
-const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\function coffeeGuide(q) {');
+const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\function complexCoffeeGuide(q) {
+  let content = '';
+  let suggestions = ['Show drinks menu', 'Show food menu', 'Build an order'];
+  const asksMilky = /\b(milky|milk.forward|creamy|mild|lots? of milk)\b/u.test(q);
+  const asksStrong = /\b(strong|hard coffee|bold|intense|black coffee|matapang)\b/u.test(q);
+  if (asksMilky && asksStrong) {
+    content = `For the milky drink, choose **Latte (₱150)**; choose **Spanish Latte (₱160)** if sweetness is also wanted. For the strong, coffee-forward drink, choose **Americano (₱130)**. One Latte plus one Americano is **₱280 total**. Bold flavor does not guarantee more caffeine, so ask staff about the number of shots.`;
+    suggestions = ['Order a Latte and Americano', 'Compare Latte and Americano', 'How does caffeine work?'];
+  } else if (/\bamericano\b/u.test(q) && /\blatte\b/u.test(q) && /\b(compare|difference|strong|stronger|caffeine|milk)\b/u.test(q)) {
+    content = `**Americano (₱130)** tastes stronger and more coffee-forward because espresso is diluted with water. **Latte (₱150)** is smoother because espresso is diluted with milk. Milk softens the flavor but **does not remove caffeine**. The higher-caffeine choice depends on Sabino’s shot count and serving recipe, which are not confirmed.`;
+    suggestions = ['Order Americano and Latte', 'Recommend a milky drink', 'Recommend a strong coffee'];
+  } else if (/\b(matcha|tea)\b/u.test(q) && /\b(coffee|espresso|americano|latte)\b/u.test(q) && /\b(caffeine|energy|stronger)\b/u.test(q)) {
+    content = `Coffee and matcha or tea can all contain caffeine, but the amount depends on the recipe and serving size. Espresso drinks usually feel more immediate and coffee-forward; matcha often tastes smoother and earthy. Sabino’s exact caffeine amounts are not published, so ask staff about portions if caffeine matters to you.`;
+    suggestions = ['Show coffee menu', 'Show tea menu', 'Low-caffeine choices'];
+  } else if (/\b(pasta|carbonara|aglio olio|chicken pesto|spaghetti)\b/u.test(q) && /\b(pair|pairs|pairing|goes with|drink with|best drink)\b/u.test(q)) {
+    content = `For creamy pasta such as **Carbonara (₱270)**, choose **Americano (₱130)** to cut through the richness; together they are **₱400**. For Chicken Pesto or Aglio Olio, try a fruit Tea or Italian Soda at **₱150** for a refreshing contrast.`;
+    suggestions = ['Order Americano and Carbonara', 'Show pasta menu', 'Show drinks menu'];
+  } else return null;
+  return {content, suggestions};
+}
+function coffeeGuide(q) {');
 
 function quantityForItem(query, itemName) {
   const name = escapeRegExp(normalizeMatch(itemName));
@@ -190,6 +210,7 @@ function answer(question) {
   let content;
   let suggestions = ['Full menu', 'Opening hours', 'Find Sabino'];
   const guide = coffeeGuide(q);
+  const complexGuide = complexCoffeeGuide(q);
   if (/\b(where|address|location|located|directions|map|find|visit|saan|nasaan|pupunta|salapungan)\b/u.test(q)) {
     content = `Sabino is at **${shop.address}**. [Open directions](${shop.maps}).`;
     suggestions = ['Opening hours', 'Contact Sabino', 'Full menu'];
@@ -205,9 +226,15 @@ function answer(question) {
   } else if (/\b(customi[sz]e|less sugar|more sugar|sweetness|no sugar|sugar.free|extra shot|add shot|milk option|oat milk|soy milk|almond milk|non.dairy|dairy.free|no ice|less ice|extra ice|syrup|substitute|adjust)\b/u.test(q)) {
     content = 'Many cafés can adjust **sweetness, ice, milk, syrups, and espresso shots**. Sabino’s exact modifiers and charges are not listed on the menu board, so please ask the barista when ordering.';
     suggestions = ['Recommend a drink', 'Show drinks menu', 'Allergy information'];
-  } else if (/\b(allerg\w*|lactose|dairy|gluten|vegan|vegetarian|ingredient|calories|nutrition|nut free|pregnan|medical)\b/u.test(q)) {
+  } else if (/\b(pregnan\w*|medical|medicine|heart|blood pressure|acid reflux|gerd|stomach|safe for me)\b/u.test(q)) {
+    content = `I can explain drinks, but I can’t decide what is medically safe for you. Sabino’s exact caffeine and nutrition amounts are not published. Ask a qualified healthcare professional about your personal limit, then tell Sabino staff the ingredients or caffeine level you need to avoid.`;
+    suggestions = ['Non-coffee options', 'Low-caffeine choices', 'Contact Sabino'];
+  } else if (/\b(allerg\w*|lactose|dairy|gluten|vegan|vegetarian|ingredient|calories|nutrition|nut free)\b/u.test(q)) {
     content = `Tell the barista the **specific ingredient you must avoid** before ordering. Shared tools can cause cross-contact, and I don’t have Sabino’s verified allergen list. Please [contact the shop](${shop.phone_link}) for a safe recommendation.`;
     suggestions = ['Show drinks menu', 'Show food menu', 'Contact Sabino'];
+  } else if (complexGuide) {
+    content = complexGuide.content;
+    suggestions = complexGuide.suggestions;
   } else if (/\b(deliver(?:y|ies|ed)?|pickup|takeout|take away|order online|advance order|pre.order)\b/u.test(q)) {
     content = `I can’t confirm Sabino’s current delivery or pickup setup. Please [call or text ${shop.phone}](${shop.phone_link}) to ask about same-day availability and pickup.`;
     suggestions = ['Contact Sabino', 'Full menu', 'Opening hours'];
